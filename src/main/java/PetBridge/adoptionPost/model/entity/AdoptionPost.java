@@ -3,9 +3,11 @@ package PetBridge.adoptionPost.model.entity;
 import PetBridge.member.model.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 public class AdoptionPost {
 
     @Id
@@ -26,18 +28,26 @@ public class AdoptionPost {
     private Member member;
 
     private String title;
+
     private String subTitle;
+
     private Long weight;
+
     private Long age;
+
     private Boolean isNeutered;
+
     private Boolean isAdoptionContractRequired;
+
     private String meetingPlace;
 
     @Column(columnDefinition = "Text")
     private String likes;//like는 MySQL의 예약어이므로 예약어 충돌 방지를 위해 likes로 변경함
+
     private String hates;
 
     private String currentDiseases;
+
     private String pastDiseases;
 
     @Column(columnDefinition = "Text")
