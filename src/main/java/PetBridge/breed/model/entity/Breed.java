@@ -1,4 +1,4 @@
-package PetBridge.adoptionPost.model.entity;
+package PetBridge.breed.model.entity;
 
 import jakarta.persistence.*;
 

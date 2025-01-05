@@ -1,5 +1,6 @@
 package PetBridge.adoptionPost.controller;
 
+import PetBridge.adoptionPost.dto.AdoptionPostDTO;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.service.AdoptionPostService;
 import org.springframework.http.HttpStatus;
@@ -17,22 +18,24 @@ public class AdoptionPostController {
         this.service = service;
     }
 
+    // 분양글 생성
     @PostMapping
     public ResponseEntity<Void> createAdoptionPost(
-            @RequestBody AdoptionPost post) {
-        service.createAdoptionPost(post);
+            @RequestBody AdoptionPost adoptionPost) {
+        service.createAdoptionPost(adoptionPost);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-
+    //분양글 수정
     @PutMapping("/{id}")
     public ResponseEntity<AdoptionPost> updateAdoptionPost(
             @PathVariable Long id,
-            @RequestBody AdoptionPost updatedPost) {
-        AdoptionPost post = service.updateAdoptionPost(id, updatedPost);
+            @RequestBody AdoptionPostDTO adoptionPostDTO) {
+        AdoptionPost post = service.updateAdoptionPost(id, adoptionPostDTO);
         return ResponseEntity.ok(post);
     }
 
+    //분양글 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAdoptionPost(
             @PathVariable Long id) {
@@ -40,7 +43,7 @@ public class AdoptionPostController {
         return ResponseEntity.noContent().build(); // 204 No Content 반환
     }
 
-    // 전체 조회
+    // 전체 분양글 조회
     @GetMapping
     public ResponseEntity<List<AdoptionPost>> getAllAdoptionPosts() {
         List<AdoptionPost> posts = service.getAllAdoptionPosts();

@@ -1,13 +1,15 @@
 package PetBridge.adoptionPost.model.entity;
 
+import PetBridge.breed.model.entity.Breed;
 import PetBridge.member.model.entity.Member;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
-@Setter
+@Builder(toBuilder = true)//엔티티 생성 시 명시적으로 필드를 설정할 수 있도록 도와주는 디자인 패턴
+@AllArgsConstructor//모든 필드를 매개변수로 받는 생성자를 생성
+@NoArgsConstructor(access = AccessLevel.PROTECTED)//매개변수가 없는 기본 생성자 생성
 public class AdoptionPost {
 
     @Id
@@ -60,8 +62,5 @@ public class AdoptionPost {
     private Long clickCount = 0L;
 
     private Long wishCount = 0L;
-
-    protected AdoptionPost() {
-    }
 
 }
