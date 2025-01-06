@@ -18,5 +18,7 @@ public class GlobalExceptionHandler {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        
+        /*Map으로 하지말자 - swagger안됨*/
     }
 }

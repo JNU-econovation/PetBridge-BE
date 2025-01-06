@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdoptionPostDTO {
+public class AdoptionPostUpdateDTO {
     private String title;
     private String subTitle;
     private Long weight;

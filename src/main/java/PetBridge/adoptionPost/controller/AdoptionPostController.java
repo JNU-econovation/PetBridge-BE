@@ -1,8 +1,10 @@
 package PetBridge.adoptionPost.controller;
 
-import PetBridge.adoptionPost.dto.AdoptionPostDTO;
+import PetBridge.adoptionPost.dto.AdoptionPostCreateDTO;
+import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.service.AdoptionPostService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,17 +23,17 @@ public class AdoptionPostController {
     // 분양글 생성
     @PostMapping
     public ResponseEntity<Void> createAdoptionPost(
-            @RequestBody AdoptionPost adoptionPost) {
-        service.createAdoptionPost(adoptionPost);
+            @RequestBody @Valid AdoptionPostCreateDTO adoptionPostCreateDTO) {
+        service.createAdoptionPost(adoptionPostCreateDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     //분양글 수정
-    @PutMapping("/{id}")
+    @PutMapping("/{postId}")
     public ResponseEntity<AdoptionPost> updateAdoptionPost(
-            @PathVariable Long id,
-            @RequestBody AdoptionPostDTO adoptionPostDTO) {
-        AdoptionPost post = service.updateAdoptionPost(id, adoptionPostDTO);
+            @PathVariable("postId") Long postId,
+            @RequestBody AdoptionPostUpdateDTO adoptionPostUpdateDTO) {
+        AdoptionPost post = service.updateAdoptionPost(postId, adoptionPostUpdateDTO);
         return ResponseEntity.ok(post);
     }
 
