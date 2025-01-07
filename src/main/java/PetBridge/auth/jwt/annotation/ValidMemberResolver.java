@@ -1,7 +1,6 @@
 package PetBridge.auth.jwt.annotation;
 
 import PetBridge.auth.jwt.service.JwtTokenProviderService;
-import PetBridge.member.model.entity.Member;
 import PetBridge.member.service.MemberService;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -24,8 +23,7 @@ public class ValidMemberResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().equals(Member.class) &&
-                parameter.hasParameterAnnotation(ValidMember.class);
+        return parameter.hasParameterAnnotation(ValidMember.class);
     }
 
     @Override
