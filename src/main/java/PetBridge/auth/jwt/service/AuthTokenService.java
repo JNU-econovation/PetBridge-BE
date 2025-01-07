@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class AuthTokenService {
     private final JwtTokenProviderService jwtTokenProviderService;
-
     public AuthTokenService(JwtTokenProviderService jwtTokenProviderService) {
         this.jwtTokenProviderService = jwtTokenProviderService;
     }
