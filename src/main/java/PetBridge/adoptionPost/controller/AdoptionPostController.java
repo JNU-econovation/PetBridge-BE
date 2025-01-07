@@ -32,16 +32,16 @@ public class AdoptionPostController {
     @PutMapping("/{postId}")
     public ResponseEntity<AdoptionPost> updateAdoptionPost(
             @PathVariable("postId") Long postId,
-            @RequestBody AdoptionPostUpdateDTO adoptionPostUpdateDTO) {
+            @RequestBody @Valid AdoptionPostUpdateDTO adoptionPostUpdateDTO) {
         AdoptionPost post = service.updateAdoptionPost(postId, adoptionPostUpdateDTO);
         return ResponseEntity.ok(post);
     }
 
     //분양글 삭제
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{postid}")
     public ResponseEntity<Void> deleteAdoptionPost(
-            @PathVariable Long id) {
-        service.deleteAdoptionPost(id);
+            @PathVariable Long postid) {
+        service.deleteAdoptionPost(postid);
         return ResponseEntity.noContent().build(); // 204 No Content 반환
     }
 
@@ -55,8 +55,8 @@ public class AdoptionPostController {
     // ID로 특정 분양글 조회
     @GetMapping("/{id}")
     public ResponseEntity<AdoptionPost> getAdoptionPostById(
-            @PathVariable Long id) {
-        AdoptionPost post = service.getAdoptionPostById(id);
+            @PathVariable Long postid) {
+        AdoptionPost post = service.getAdoptionPostById(postid);
         return ResponseEntity.ok(post); // 200 OK와 함께 해당 객체 반환
     }
 

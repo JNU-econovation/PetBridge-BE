@@ -1,24 +1,19 @@
-package PetBridge.common;
+package PetBridge.common.exception;
 
 import PetBridge.adoptionPost.exception.AdoptionPostNotFoundException;
+import PetBridge.common.dto.ErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AdoptionPostNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleAdoptionPostNotFoundException(
+    public ResponseEntity<ErrorResponseDTO> handleAdoptionPostNotFoundException(
             AdoptionPostNotFoundException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("error", ex.getMessage());
+        ErrorResponseDTO errorResponse = new ErrorResponseDTO(ex.getMessage(), HttpStatus.NOT_FOUND.value());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-        
-        /*Map으로 하지말자 - swagger안됨*/
     }
 }
