@@ -80,21 +80,16 @@ public class AdoptionPostService {
     public List<AdoptionPostSortDTO> getAdoptionPosts(String sortBy) {
         List<AdoptionPost> posts;
 
-        switch (sortBy) {
-            case "recent": // 최신순
-                posts = adoptionPostRepository.findAllByOrderByIdDescending();
-                break;
-            case "view": // 조회순
-                posts = adoptionPostRepository.findAllByOrderByClickCountDescending();
-                break;
-            case "wish": // 찜순
-                posts = adoptionPostRepository.findAllByOrderByWishCountDescending();
-                break;
-            case "all": // 전체 조회
-                posts = adoptionPostRepository.findAll();
-                break;
-            default:
-                throw new IllegalArgumentException("유효하지 않은 정렬 기준입니다.");
+        if ("recent".equals(sortBy)) { // 최신순
+            posts = adoptionPostRepository.findAllByOrderByIdDescending();
+        } else if ("view".equals(sortBy)) { // 조회순
+            posts = adoptionPostRepository.findAllByOrderByClickCountDescending();
+        } else if ("wish".equals(sortBy)) { // 찜순
+            posts = adoptionPostRepository.findAllByOrderByWishCountDescending();
+        } else if ("all".equals(sortBy)) { // 전체 조회
+            posts = adoptionPostRepository.findAll();
+        } else {
+            throw new IllegalArgumentException("유효하지 않은 정렬 기준입니다.");
         }
         // DTO로 변환
         return posts.stream()

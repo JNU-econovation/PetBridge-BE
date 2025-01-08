@@ -15,7 +15,5 @@ public interface AdoptionPostRepository extends JpaRepository<AdoptionPost, Long
     List<AdoptionPost> findAllByOrderByClickCountDescending();
     // 찜수 순 (찜수를 기준으로 내림차순 정렬)
     List<AdoptionPost> findAllByOrderByWishCountDescending();
-    // 오래된 순 (ID를 기준으로 오름차순 정렬)
-    List<AdoptionPost> findAllByOrderByIdAscending();
 
 }
