@@ -1,42 +1,27 @@
 package PetBridge.member.model.entity;
 
+import PetBridge.common.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
-@Setter
-public class Member {
-
+@SuperBuilder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String name;
-
-    @Column(nullable = false, length = 10, unique = true)
+    @Column(nullable = false, unique = true)
     private String nickname;
-
-    @Column(nullable = false, length = 10, unique = true)
-    private String loginId;
-
-    @Column(nullable = false)
-    private String loginPassword;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, length = 15)
-    private String phoneNumber;
+    @Column(nullable = false)
+    private String password;
 
-    private String kakaoAccessToken;
-    private String kakaoRefreshToken;
-    private String refreshToken;
-
-    private Long searchHistoryCount = 0L;
-
-    protected Member() {
-    }
+    private Long searchHistoryCount;
 }
