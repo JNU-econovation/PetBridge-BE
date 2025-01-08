@@ -1,6 +1,7 @@
 package PetBridge.adoptionPost.controller;
 
 import PetBridge.adoptionPost.dto.AdoptionPostCreateDTO;
+import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.service.AdoptionPostService;
@@ -38,10 +39,10 @@ public class AdoptionPostController {
     }
 
     //분양글 삭제
-    @DeleteMapping("/{postid}")
+    @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deleteAdoptionPost(
-            @PathVariable Long postid) {
-        service.deleteAdoptionPost(postid);
+            @PathVariable Long postId) {
+        service.deleteAdoptionPost(postId);
         return ResponseEntity.noContent().build(); // 204 No Content 반환
     }
 
@@ -53,12 +54,19 @@ public class AdoptionPostController {
     }
 
     // ID로 특정 분양글 조회
-    @GetMapping("/{id}")
+    @GetMapping("/{postId}")
     public ResponseEntity<AdoptionPost> getAdoptionPostById(
-            @PathVariable Long postid) {
-        AdoptionPost post = service.getAdoptionPostById(postid);
+            @PathVariable Long postId) {
+        AdoptionPost post = service.getAdoptionPostById(postId);
         return ResponseEntity.ok(post); // 200 OK와 함께 해당 객체 반환
     }
 
+    // 정렬된 분양글 조회 (최신순, 등록순, 찜순, 조회순으로 조회를 할 수 있다)
+    @GetMapping("/sorted")
+    public ResponseEntity<List<AdoptionPostSortDTO>> getSortedAdoptionPosts(
+            @RequestParam(defaultValue = "latest") String sort) {
+        List<AdoptionPostSortDTO> sortedPosts = service.getSortedAdoptionPosts(sort);
+        return ResponseEntity.ok(sortedPosts);
+    }
 
 }
