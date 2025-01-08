@@ -77,25 +77,25 @@ public class AdoptionPostService {
 
     // 정렬 기준에 따라 데이터 조회
     //현재 Repository 메서드가 AdoptionPost 엔티티 리스트를 반환하기 때문에 posts를 AdoptionPost엔티티로 선언함.
-    public List<AdoptionPostSortDTO> getSortedAdoptionPosts(String sort) {
+    public List<AdoptionPostSortDTO> getAdoptionPosts(String sortBy) {
         List<AdoptionPost> posts;
-        switch (sort) {
-            case "latest":
+
+        switch (sortBy) {
+            case "recent": // 최신순
                 posts = adoptionPostRepository.findAllByOrderByIdDescending();
                 break;
-            case "click":
+            case "view": // 조회순
                 posts = adoptionPostRepository.findAllByOrderByClickCountDescending();
                 break;
-            case "wish":
+            case "wish": // 찜순
                 posts = adoptionPostRepository.findAllByOrderByWishCountDescending();
                 break;
-            case "oldest":
-                posts = adoptionPostRepository.findAllByOrderByIdAscending();
+            case "all": // 전체 조회
+                posts = adoptionPostRepository.findAll();
                 break;
             default:
                 throw new IllegalArgumentException("유효하지 않은 정렬 기준입니다.");
         }
-
         // DTO로 변환
         return posts.stream()
                 .map(post -> new AdoptionPostSortDTO(

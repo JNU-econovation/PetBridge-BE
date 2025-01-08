@@ -35,7 +35,7 @@ public class AdoptionPostController {
             @PathVariable("postId") Long postId,
             @RequestBody @Valid AdoptionPostUpdateDTO adoptionPostUpdateDTO) {
         AdoptionPost post = service.updateAdoptionPost(postId, adoptionPostUpdateDTO);
-        return ResponseEntity.ok(post);
+        return ResponseEntity.ok().build();
     }
 
     //분양글 삭제
@@ -46,13 +46,6 @@ public class AdoptionPostController {
         return ResponseEntity.noContent().build(); // 204 No Content 반환
     }
 
-    // 전체 분양글 조회
-    @GetMapping
-    public ResponseEntity<List<AdoptionPost>> getAllAdoptionPosts() {
-        List<AdoptionPost> posts = service.getAllAdoptionPosts();
-        return ResponseEntity.ok(posts); // 200 OK와 함께 리스트 반환
-    }
-
     // ID로 특정 분양글 조회
     @GetMapping("/{postId}")
     public ResponseEntity<AdoptionPost> getAdoptionPostById(
@@ -61,12 +54,12 @@ public class AdoptionPostController {
         return ResponseEntity.ok(post); // 200 OK와 함께 해당 객체 반환
     }
 
-    // 정렬된 분양글 조회 (최신순, 등록순, 찜순, 조회순으로 조회를 할 수 있다)
-    @GetMapping("/sorted")
-    public ResponseEntity<List<AdoptionPostSortDTO>> getSortedAdoptionPosts(
-            @RequestParam(defaultValue = "latest") String sort) {
-        List<AdoptionPostSortDTO> sortedPosts = service.getSortedAdoptionPosts(sort);
-        return ResponseEntity.ok(sortedPosts);
+    // 분양글 조회 (전체 조회 및 정렬 조회)
+    @GetMapping
+    public ResponseEntity<List<AdoptionPostSortDTO>> getAdoptionPosts(
+            @RequestParam(required = false, defaultValue = "all") String sortBy) {
+        List<AdoptionPostSortDTO> posts = service.getAdoptionPosts(sortBy);
+        return ResponseEntity.ok(posts);
     }
 
 }
