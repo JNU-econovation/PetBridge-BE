@@ -6,6 +6,8 @@ import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
 import PetBridge.adoptionPost.exception.AdoptionPostNotFoundException;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.repository.AdoptionPostRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +20,7 @@ public class AdoptionPostService {
     public AdoptionPostService(AdoptionPostRepository adoptionPostRepository) {
         this.adoptionPostRepository = adoptionPostRepository;
     }
-    
+
     //Transactional는 데이터 변경 작업(삽입,수정,삭제)을 포함 Transactional(readOnly=true) 는 데이터 조회 작업만 수행
     @Transactional(readOnly = true)
     public AdoptionPost findByIdOrThrow(Long postId) {
@@ -88,29 +90,28 @@ public class AdoptionPostService {
     // 정렬 기준에 따라 데이터 조회
     //현재 Repository 메서드가 AdoptionPost 엔티티 리스트를 반환하기 때문에 posts를 AdoptionPost엔티티로 선언함.
     @Transactional(readOnly = true)
-    public List<AdoptionPostSortDTO> getAdoptionPosts(String sortBy) {
-        List<AdoptionPost> posts;
+    public Slice<AdoptionPostSortDTO> getAdoptionPosts(String sortBy, Pageable pageable) {
+        Slice<AdoptionPost> posts;
 
         if ("recent".equals(sortBy)) { // 최신순
-            posts = adoptionPostRepository.findAllByOrderByIdDesc();
+            posts = adoptionPostRepository.findAllByOrderByIdDesc(pageable);
         } else if ("view".equals(sortBy)) { // 조회순
-            posts = adoptionPostRepository.findAllByOrderByClickCountDesc();
+            posts = adoptionPostRepository.findAllByOrderByClickCountDesc(pageable);
         } else if ("wish".equals(sortBy)) { // 찜순
-            posts = adoptionPostRepository.findAllByOrderByWishCountDesc();
+            posts = adoptionPostRepository.findAllByOrderByWishCountDesc(pageable);
         } else if ("all".equals(sortBy)) { // 전체 조회
-            posts = adoptionPostRepository.findAll();
+            posts = adoptionPostRepository.findAll(pageable);
         } else {
             throw new IllegalArgumentException("유효하지 않은 정렬 기준입니다.");
         }
         // DTO로 변환
-        return posts.stream()
-                .map(post -> new AdoptionPostSortDTO(
-                        post.getId(),
-                        post.getTitle(),
-                        post.getSubTitle(),
-                        post.getClickCount(),
-                        post.getWishCount()
-                ))
-                .toList();
+        return posts.map(post -> new AdoptionPostSortDTO(
+                post.getId(),
+                post.getTitle(),
+                post.getSubTitle(),
+                post.getClickCount(),
+                post.getWishCount()
+        ));
+
     }
 }

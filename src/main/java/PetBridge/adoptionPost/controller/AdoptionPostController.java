@@ -6,6 +6,8 @@ import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.service.AdoptionPostService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,10 +58,9 @@ public class AdoptionPostController {
 
     // 분양글 조회 (전체 조회 및 정렬 조회)
     @GetMapping
-    public ResponseEntity<List<AdoptionPostSortDTO>> getAdoptionPosts(
-            @RequestParam(required = false, defaultValue = "all") String sortBy) {
-        List<AdoptionPostSortDTO> posts = service.getAdoptionPosts(sortBy);
-        return ResponseEntity.ok(posts);
+    public Slice<AdoptionPostSortDTO> getAdoptionPosts(
+            @RequestParam(required = false, defaultValue = "all") String sortBy, Pageable pageable) {
+        return service.getAdoptionPosts(sortBy, pageable);
     }
 
 }
