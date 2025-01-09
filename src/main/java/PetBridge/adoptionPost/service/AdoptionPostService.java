@@ -45,22 +45,24 @@ public class AdoptionPostService {
     }
 
     // 필드 업데이트 메서드
+    // updateFields는 엔티티의 필드 값만 변경하는 비즈니스 로직에 해당하며 데이터베이스와의 직접적인 상호작용이 없습니다.
+    // 반면 findByIdOrThrow는 데이터베이스 조회 작업을 수행하므로 트랜잭션 관리가 필요합니다.
     private AdoptionPost updateFields(AdoptionPost existingPost, AdoptionPostUpdateDTO dto) {
         return existingPost.toBuilder()
-                .title(dto.getTitle())
-                .subTitle(dto.getSubTitle())
-                .weight(dto.getWeight())
-                .age(dto.getAge())
-                .isNeutered(dto.getIsNeutered())
-                .isAdoptionContractRequired(dto.getIsAdoptionContractRequired())
-                .meetingPlace(dto.getMeetingPlace())
-                .likes(dto.getLikes())
-                .hates(dto.getHates())
-                .currentDiseases(dto.getCurrentDiseases())
-                .pastDiseases(dto.getPastDiseases())
-                .petOwnerRequirement(dto.getPetOwnerRequirement())
-                .detailContent(dto.getDetailContent())
-                .adoptionFinalizationStatus(dto.getAdoptionFinalizationStatus())
+                .title(dto.title()) // dto.getTitle() -> dto.title()
+                .subTitle(dto.subTitle())
+                .weight(dto.weight())
+                .age(dto.age())
+                .isNeutered(dto.isNeutered())
+                .isAdoptionContractRequired(dto.isAdoptionContractRequired())
+                .meetingPlace(dto.meetingPlace())
+                .likes(dto.likes())
+                .hates(dto.hates())
+                .currentDiseases(dto.currentDiseases())
+                .pastDiseases(dto.pastDiseases())
+                .petOwnerRequirement(dto.petOwnerRequirement())
+                .detailContent(dto.detailContent())
+                .adoptionFinalizationStatus(dto.adoptionFinalizationStatus())
                 .build();
     }
 
@@ -90,11 +92,11 @@ public class AdoptionPostService {
         List<AdoptionPost> posts;
 
         if ("recent".equals(sortBy)) { // 최신순
-            posts = adoptionPostRepository.findAllByOrderByIdDescending();
+            posts = adoptionPostRepository.findAllByOrderByIdDesc();
         } else if ("view".equals(sortBy)) { // 조회순
-            posts = adoptionPostRepository.findAllByOrderByClickCountDescending();
+            posts = adoptionPostRepository.findAllByOrderByClickCountDesc();
         } else if ("wish".equals(sortBy)) { // 찜순
-            posts = adoptionPostRepository.findAllByOrderByWishCountDescending();
+            posts = adoptionPostRepository.findAllByOrderByWishCountDesc();
         } else if ("all".equals(sortBy)) { // 전체 조회
             posts = adoptionPostRepository.findAll();
         } else {

@@ -10,10 +10,10 @@ import java.util.List;
 public interface AdoptionPostRepository extends JpaRepository<AdoptionPost, Long> {
 
     // 최신순 (ID를 기준으로 내림차순 정렬)
-    List<AdoptionPost> findAllByOrderByIdDescending();
+    List<AdoptionPost> findAllByOrderByIdDesc();
     // 조회수 순 (조회수를 기준으로 내림차순 정렬)
-    List<AdoptionPost> findAllByOrderByClickCountDescending();
+    List<AdoptionPost> findAllByOrderByClickCountDesc();
     // 찜수 순 (찜수를 기준으로 내림차순 정렬)
-    List<AdoptionPost> findAllByOrderByWishCountDescending();
+    List<AdoptionPost> findAllByOrderByWishCountDesc();
 
 }
