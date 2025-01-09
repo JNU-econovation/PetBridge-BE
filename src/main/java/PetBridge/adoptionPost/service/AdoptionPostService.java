@@ -7,6 +7,7 @@ import PetBridge.adoptionPost.exception.AdoptionPostNotFoundException;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.repository.AdoptionPostRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,13 +18,16 @@ public class AdoptionPostService {
     public AdoptionPostService(AdoptionPostRepository adoptionPostRepository) {
         this.adoptionPostRepository = adoptionPostRepository;
     }
-
+    
+    //Transactional는 데이터 변경 작업(삽입,수정,삭제)을 포함 Transactional(readOnly=true) 는 데이터 조회 작업만 수행
+    @Transactional(readOnly = true)
     public AdoptionPost findByIdOrThrow(Long postId) {
         return adoptionPostRepository.findById(postId)
                 .orElseThrow(() -> new AdoptionPostNotFoundException("해당 ID의 분양글을 찾을 수 없습니다: " + postId));
     }
 
     //분양글 생성
+    @Transactional
     public void createAdoptionPost(AdoptionPostCreateDTO dto) {
         // DTO를 엔티티로 변환
         AdoptionPost post = dto.toEntity();
@@ -31,6 +35,7 @@ public class AdoptionPostService {
     }
 
     // 분양글 수정
+    @Transactional
     public AdoptionPost updateAdoptionPost(Long postId, AdoptionPostUpdateDTO adoptionPostUpdateDTO) {
         // 1. 기존 분양글 조회
         AdoptionPost existingPost = findByIdOrThrow(postId);
@@ -60,23 +65,27 @@ public class AdoptionPostService {
     }
 
     //분양글 삭제
+    @Transactional
     public void deleteAdoptionPost(Long postId) {
         AdoptionPost adoptionPost = findByIdOrThrow(postId);
         adoptionPostRepository.delete(adoptionPost);
     }
 
     // 전체 분양글 조회
+    @Transactional(readOnly = true)
     public List<AdoptionPost> getAllAdoptionPosts() {
         return adoptionPostRepository.findAll(); // 모든 분양글 반환
     }
 
     // 특정 ID로 분양글 조회
+    @Transactional(readOnly = true)
     public AdoptionPost getAdoptionPostById(Long postId) {
         return findByIdOrThrow(postId);
     }
 
     // 정렬 기준에 따라 데이터 조회
     //현재 Repository 메서드가 AdoptionPost 엔티티 리스트를 반환하기 때문에 posts를 AdoptionPost엔티티로 선언함.
+    @Transactional(readOnly = true)
     public List<AdoptionPostSortDTO> getAdoptionPosts(String sortBy) {
         List<AdoptionPost> posts;
 
