@@ -5,10 +5,7 @@ import PetBridge.member.model.entity.Member;
 import PetBridge.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/member")
@@ -24,6 +21,15 @@ public class MemberController {
             @PathVariable("value") String nickname
     ) {
         memberService.validateDuplicateNickname(nickname);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PutMapping("/nickname")
+    public ResponseEntity<Void> changeNickname (
+            @ValidMember Member member,
+            @RequestParam ("value") String nickname
+    ) {
+        memberService.changeNickname(member, nickname);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

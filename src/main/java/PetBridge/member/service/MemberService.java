@@ -50,4 +50,9 @@ public class MemberService {
         validateDuplicateEmail(signUpRequest.email());
         memberRepository.save(signUpRequest.toEntity());
     }
+
+    @Transactional
+    public void changeNickname(Member member, String nickname) {
+        member.changeNickname(nickname);
+    }
 }

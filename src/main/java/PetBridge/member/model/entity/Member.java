@@ -24,4 +24,8 @@ public class Member extends BaseEntity {
     private String password;
 
     private Long searchHistoryCount;
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
