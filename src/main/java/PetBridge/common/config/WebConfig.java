@@ -25,7 +25,11 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/api/**")  // 인터셉터를 적용할 URL 패턴
-                .excludePathPatterns("/api/v1/auth/login", "/api/v1/auth/signup", "/api/v1/email/emailCode");  // 예외 URL
+                .excludePathPatterns(
+                        "/api/v1/auth/login",
+                        "/api/v1/auth/signup",
+                        "/api/v1/email/emailCode",
+                        "/api/v1/member/nickname/*");  // 예외 URL
     }
 
     @Override
