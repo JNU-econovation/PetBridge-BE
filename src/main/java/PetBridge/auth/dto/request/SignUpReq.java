@@ -12,6 +12,7 @@ public record SignUpReq(
                 .email(email)
                 .password(password)
                 .nickname(nickname)
+                .searchHistoryCount(0L)
                 .build();
     }
 }
