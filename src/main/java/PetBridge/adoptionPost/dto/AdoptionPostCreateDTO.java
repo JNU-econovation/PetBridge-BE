@@ -49,12 +49,11 @@ public record AdoptionPostCreateDTO (
     //클라이언트에서 값을 전달하지 않으면, 엔티티에서 정의한 기본값(false)이 자동으로 적용됨
     Boolean adoptionFinalizationStatus,
 
-    //객체타입은 NotNull을 사용해야함. NotBlank는 문자열 필드에서만 동작하므로 객체 타입에서는 작동하지 않음
-    @NotNull(message = "회원 정보는 필수 입력 사항입니다.")
-    Member member,
+    @NotNull(message = "분양 작성자는 필수 입력 사항입니다.")
+    Long memberId,
 
     @NotNull(message = "품종 정보는 필수 입력 사항입니다.")
-    Breed breed
+    Long breedId
 ){
     // DTO를 엔티티로 변환하는 메서드
     public AdoptionPost toEntity() {
@@ -73,10 +72,8 @@ public record AdoptionPostCreateDTO (
                 .petOwnerRequirement(this.petOwnerRequirement)
                 .detailContent(this.detailContent)
                 .adoptionFinalizationStatus(this.adoptionFinalizationStatus)
-                .member(this.member)
-                .breed(this.breed)
+                .member(Member.builder().id(this.memberId).build())
+                .breed(Breed.builder().id(this.breedId).build())
                 .build();
     }
 }
-
-
