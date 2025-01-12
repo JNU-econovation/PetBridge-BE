@@ -1,18 +1,17 @@
-package PetBridge.member.exception;
+package PetBridge.email.exception;
 
 import PetBridge.common.exception.ErrorType;
 import org.springframework.http.HttpStatus;
 
-public enum MemberErrorType implements ErrorType {
-    MEMBER_NOT_FOUND_EXCEPTION ("Member404_001", HttpStatus.NOT_FOUND, "해당하는 멤버를 찾을 수 없습니다"),
-    INVALID_EMAIL_OR_PASSWORD_EXCEPTION("Member400_001",HttpStatus.BAD_REQUEST, "이메일이나 비밀번호가 틀렸습니다"),
-    ALREADY_EXIST_NICKNANE_EXCEPTION("Member400_002", HttpStatus.BAD_REQUEST, "중복된 닉네임입니다");
+public enum EmailErrorType implements ErrorType {
+    EMAIL_NOT_FOUND_EXCEPTION("Email404_001", HttpStatus.NOT_FOUND, "일치하는 이메일을 찾을 수 없습니다"),
+    FAIL_TO_SEND_EMAIL_CODE("Email500_001", HttpStatus.INTERNAL_SERVER_ERROR, "이메일 코드 전송 실패");
 
     private final String errorCode;
     private final HttpStatus httpStatus;
     private final String message;
 
-    MemberErrorType(String errorCode, HttpStatus httpStatus, String message) {
+    EmailErrorType(String errorCode, HttpStatus httpStatus, String message) {
         this.errorCode = errorCode;
         this.httpStatus = httpStatus;
         this.message = message;
