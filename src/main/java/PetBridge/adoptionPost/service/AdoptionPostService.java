@@ -1,6 +1,7 @@
 package PetBridge.adoptionPost.service;
 
 import PetBridge.adoptionPost.dto.AdoptionPostCreateDTO;
+import PetBridge.adoptionPost.dto.AdoptionPostDetailDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
 import PetBridge.adoptionPost.exception.AdoptionPostNotFoundException;
@@ -81,10 +82,31 @@ public class AdoptionPostService {
         return adoptionPostRepository.findAll(); // 모든 분양글 반환
     }
 
-    // 특정 ID로 분양글 조회
+    // 특정 ID로 분양글 조회 (분양글 상세페이지)
     @Transactional(readOnly = true)
-    public AdoptionPost getAdoptionPostById(Long postId) {
-        return findByIdOrThrow(postId);
+    public AdoptionPostDetailDTO getAdoptionPostById(Long postId) {
+        AdoptionPost post = findByIdOrThrow(postId);
+
+        return new AdoptionPostDetailDTO(post.getId(),
+                post.getTitle(),
+                post.getSubTitle(),
+                post.getWeight(),
+                post.getAge(),
+                post.getIsNeutered(),
+                post.getIsAdoptionContractRequired(),
+                post.getMeetingPlace(),
+                post.getLikes(),
+                post.getHates(),
+                post.getCurrentDiseases(),
+                post.getPastDiseases(),
+                post.getPetOwnerRequirement(),
+                post.getDetailContent(),
+                post.getAdoptionFinalizationStatus(),
+                post.getClickCount(),
+                post.getWishCount(),
+                post.getBreed().getName(),
+                post.getMember().getNickname()
+        );
     }
 
     // 정렬 기준에 따라 데이터 조회

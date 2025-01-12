@@ -1,6 +1,7 @@
 package PetBridge.adoptionPost.controller;
 
 import PetBridge.adoptionPost.dto.AdoptionPostCreateDTO;
+import PetBridge.adoptionPost.dto.AdoptionPostDetailDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
@@ -50,10 +51,10 @@ public class AdoptionPostController {
 
     // ID로 특정 분양글 조회
     @GetMapping("/{postId}")
-    public ResponseEntity<AdoptionPost> getAdoptionPostById(
+    public ResponseEntity<AdoptionPostDetailDTO> getAdoptionPostById(
             @PathVariable Long postId) {
-        AdoptionPost post = service.getAdoptionPostById(postId);
-        return ResponseEntity.ok(post); // 200 OK와 함께 해당 객체 반환
+        AdoptionPostDetailDTO dto = service.getAdoptionPostById(postId);
+        return ResponseEntity.ok(dto); // 200 OK와 함께 해당 객체 반환
     }
 
     // 분양글 조회 (전체 조회 및 정렬 조회)
