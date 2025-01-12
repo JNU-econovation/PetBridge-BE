@@ -28,4 +28,20 @@ public class Member extends BaseEntity {
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public boolean isSearchHistoryCountMax() {
+        return searchHistoryCount == 10;
+    }
+
+    public void increaseHistoryCountBySearching() {
+        searchHistoryCount++;
+    }
+
+    public void decreaseHistoryCountByRemove() {
+        searchHistoryCount--;
+    }
+
+    public void resetHistoryCountByRemoveAll() {
+        searchHistoryCount = 0L;
+    }
 }
