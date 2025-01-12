@@ -33,7 +33,7 @@ public class AdoptionPostController {
 
     //분양글 수정
     @PutMapping("/{postId}")
-    public ResponseEntity<AdoptionPost> updateAdoptionPost(
+    public ResponseEntity<Void> updateAdoptionPost(
             @PathVariable("postId") Long postId,
             @RequestBody @Valid AdoptionPostUpdateDTO adoptionPostUpdateDTO) {
         AdoptionPost post = service.updateAdoptionPost(postId, adoptionPostUpdateDTO);
