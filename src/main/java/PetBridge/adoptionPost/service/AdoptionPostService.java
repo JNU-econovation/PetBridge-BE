@@ -7,6 +7,9 @@ import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
 import PetBridge.adoptionPost.exception.AdoptionPostNotFoundException;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.repository.AdoptionPostRepository;
+import PetBridge.member.model.entity.Member;
+import PetBridge.member.repository.MemberRepository;
+import PetBridge.search.service.SearchService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -16,10 +19,13 @@ import java.util.List;
 
 @Service
 public class AdoptionPostService {
-    private final AdoptionPostRepository adoptionPostRepository;
 
-    public AdoptionPostService(AdoptionPostRepository adoptionPostRepository) {
+    private final AdoptionPostRepository adoptionPostRepository;
+    private final SearchService searchService;
+
+    public AdoptionPostService(AdoptionPostRepository adoptionPostRepository, SearchService searchService) {
         this.adoptionPostRepository = adoptionPostRepository;
+        this.searchService = searchService;
     }
 
     //Transactional는 데이터 변경 작업(삽입,수정,삭제)을 포함 Transactional(readOnly=true) 는 데이터 조회 작업만 수행
@@ -28,6 +34,7 @@ public class AdoptionPostService {
         return adoptionPostRepository.findById(postId)
                 .orElseThrow(() -> new AdoptionPostNotFoundException("해당 ID의 분양글을 찾을 수 없습니다: " + postId));
     }
+
 
     //분양글 생성
     @Transactional
@@ -112,7 +119,13 @@ public class AdoptionPostService {
     // 정렬 기준에 따라 데이터 조회
     //현재 Repository 메서드가 AdoptionPost 엔티티 리스트를 반환하기 때문에 posts를 AdoptionPost엔티티로 선언함.
     @Transactional(readOnly = true)
-    public Slice<AdoptionPostSortDTO> getAdoptionPosts(String sortBy, Pageable pageable) {
+    public Slice<AdoptionPostSortDTO> getAdoptionPosts(String sortBy, Pageable pageable, Member member, String keyword) {
+
+        // 키워드가 있는 경우에만 검색 기록 저장
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            searchService.addSearchHistory(member, keyword);
+        }
+
         Slice<AdoptionPost> posts;
 
         if ("recent".equals(sortBy)) { // 최신순

@@ -6,6 +6,8 @@ import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.service.AdoptionPostService;
+import PetBridge.member.model.entity.Member;
+import PetBridge.member.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -19,9 +21,11 @@ import java.util.List;
 @RequestMapping("/api/v1/adoption-post")
 public class AdoptionPostController {
     private final AdoptionPostService service;
+    private final MemberService memberService;
 
-    public AdoptionPostController(AdoptionPostService service) {
+    public AdoptionPostController(AdoptionPostService service, MemberService memberService) {
         this.service = service;
+        this.memberService = memberService;
     }
 
     // 분양글 생성
@@ -57,11 +61,15 @@ public class AdoptionPostController {
         return ResponseEntity.ok(dto); // 200 OK와 함께 해당 객체 반환
     }
 
-    // 분양글 조회 (전체 조회 및 정렬 조회)
+    // 분양글 조회 (전체 조회 및 정렬 조회) + 검색 기록 저장 기능
     @GetMapping
     public Slice<AdoptionPostSortDTO> getAdoptionPosts(
-            @RequestParam(required = false, defaultValue = "all") String sortBy, Pageable pageable) {
-        return service.getAdoptionPosts(sortBy, pageable);
+            @RequestParam(required = false, defaultValue = "all") String sortBy,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = true) Long memberId,
+            Pageable pageable) {
+        Member member = memberService.findByIdOrThrow(memberId);
+        return service.getAdoptionPosts(sortBy, pageable, member, keyword);
     }
 
 }
