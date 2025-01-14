@@ -1,11 +1,16 @@
 package PetBridge.adoptionPost.controller;
 
 import PetBridge.adoptionPost.dto.AdoptionPostCreateDTO;
+import PetBridge.adoptionPost.dto.AdoptionPostDetailDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.service.AdoptionPostService;
+import PetBridge.member.model.entity.Member;
+import PetBridge.member.service.MemberService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +21,11 @@ import java.util.List;
 @RequestMapping("/api/v1/adoption-post")
 public class AdoptionPostController {
     private final AdoptionPostService service;
+    private final MemberService memberService;
 
-    public AdoptionPostController(AdoptionPostService service) {
+    public AdoptionPostController(AdoptionPostService service, MemberService memberService) {
         this.service = service;
+        this.memberService = memberService;
     }
 
     // 분양글 생성
@@ -31,11 +38,11 @@ public class AdoptionPostController {
 
     //분양글 수정
     @PutMapping("/{postId}")
-    public ResponseEntity<AdoptionPost> updateAdoptionPost(
+    public ResponseEntity<Void> updateAdoptionPost(
             @PathVariable("postId") Long postId,
             @RequestBody @Valid AdoptionPostUpdateDTO adoptionPostUpdateDTO) {
         AdoptionPost post = service.updateAdoptionPost(postId, adoptionPostUpdateDTO);
-        return ResponseEntity.ok(post);
+        return ResponseEntity.ok().build();
     }
 
     //분양글 삭제
@@ -46,27 +53,23 @@ public class AdoptionPostController {
         return ResponseEntity.noContent().build(); // 204 No Content 반환
     }
 
-    // 전체 분양글 조회
-    @GetMapping
-    public ResponseEntity<List<AdoptionPost>> getAllAdoptionPosts() {
-        List<AdoptionPost> posts = service.getAllAdoptionPosts();
-        return ResponseEntity.ok(posts); // 200 OK와 함께 리스트 반환
-    }
-
     // ID로 특정 분양글 조회
     @GetMapping("/{postId}")
-    public ResponseEntity<AdoptionPost> getAdoptionPostById(
+    public ResponseEntity<AdoptionPostDetailDTO> getAdoptionPostById(
             @PathVariable Long postId) {
-        AdoptionPost post = service.getAdoptionPostById(postId);
-        return ResponseEntity.ok(post); // 200 OK와 함께 해당 객체 반환
+        AdoptionPostDetailDTO dto = service.getAdoptionPostById(postId);
+        return ResponseEntity.ok(dto); // 200 OK와 함께 해당 객체 반환
     }
 
-    // 정렬된 분양글 조회 (최신순, 등록순, 찜순, 조회순으로 조회를 할 수 있다)
-    @GetMapping("/sorted")
-    public ResponseEntity<List<AdoptionPostSortDTO>> getSortedAdoptionPosts(
-            @RequestParam(defaultValue = "latest") String sort) {
-        List<AdoptionPostSortDTO> sortedPosts = service.getSortedAdoptionPosts(sort);
-        return ResponseEntity.ok(sortedPosts);
+    // 분양글 조회 (전체 조회 및 정렬 조회) + 검색 기록 저장 기능
+    @GetMapping
+    public Slice<AdoptionPostSortDTO> getAdoptionPosts(
+            @RequestParam(required = false, defaultValue = "all") String sortBy,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = true) Long memberId,
+            Pageable pageable) {
+        Member member = memberService.findByIdOrThrow(memberId);
+        return service.getAdoptionPosts(sortBy, pageable, member, keyword);
     }
 
 }
