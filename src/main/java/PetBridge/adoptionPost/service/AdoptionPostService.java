@@ -8,7 +8,6 @@ import PetBridge.adoptionPost.exception.AdoptionPostNotFoundException;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.repository.AdoptionPostRepository;
 import PetBridge.member.model.entity.Member;
-import PetBridge.member.repository.MemberRepository;
 import PetBridge.search.service.SearchService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

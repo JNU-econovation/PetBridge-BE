@@ -1,13 +1,10 @@
 package PetBridge.adoptionPost.repository;
 
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
-import PetBridge.member.model.entity.Member;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface AdoptionPostRepository extends JpaRepository<AdoptionPost, Long> {
