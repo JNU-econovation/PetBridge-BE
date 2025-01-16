@@ -31,7 +31,7 @@ public class AdoptionPostService {
     @Transactional(readOnly = true)
     public AdoptionPost findByIdOrThrow(Long postId) {
         return adoptionPostRepository.findById(postId)
-                .orElseThrow(() -> new AdoptionPostNotFoundException("해당 ID의 분양글을 찾을 수 없습니다: " + postId));
+                .orElseThrow(() -> new AdoptionPostNotFoundException());
     }
 
 

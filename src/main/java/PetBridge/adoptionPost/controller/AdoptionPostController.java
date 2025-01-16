@@ -4,6 +4,7 @@ import PetBridge.adoptionPost.dto.AdoptionPostCreateDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostDetailDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
+import PetBridge.adoptionPost.exception.AdoptionPostErrorType;
 import PetBridge.adoptionPost.service.AdoptionPostService;
 import PetBridge.common.response.ApiResponse;
 import PetBridge.member.model.entity.Member;
@@ -31,8 +32,12 @@ public class AdoptionPostController {
     public ResponseEntity<ApiResponse<Void>> createAdoptionPost(
             @RequestBody @Valid AdoptionPostCreateDTO adoptionPostCreateDTO) {
         service.createAdoptionPost(adoptionPostCreateDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).
-                body(ApiResponse.success("분양글이 성공적으로 생성되었습니다.",HttpStatus.CREATED.value()));
+        return ResponseEntity.status(AdoptionPostErrorType.POST_CREATED.getHttpStatus())
+                .body(ApiResponse.success(
+                        null,
+                        AdoptionPostErrorType.POST_CREATED.getMessage(),
+                        AdoptionPostErrorType.POST_CREATED.getHttpStatus().value()
+                ));
     }
 
     //분양글 수정
@@ -41,7 +46,11 @@ public class AdoptionPostController {
             @PathVariable("postId") Long postId,
             @RequestBody @Valid AdoptionPostUpdateDTO adoptionPostUpdateDTO) {
         service.updateAdoptionPost(postId, adoptionPostUpdateDTO);
-        return ResponseEntity.ok(ApiResponse.success(String.format("분양글 ID:%d가 성공적으로 수정되었습니다.", postId), HttpStatus.OK.value()));
+        return ResponseEntity.ok(ApiResponse.success(
+                null,
+                AdoptionPostErrorType.POST_UPDATED.getMessage(),
+                AdoptionPostErrorType.POST_UPDATED.getHttpStatus().value()
+        ));
     }
 
     //분양글 삭제
@@ -49,7 +58,11 @@ public class AdoptionPostController {
     public ResponseEntity<ApiResponse<Void>> deleteAdoptionPost(
             @PathVariable Long postId) {
         service.deleteAdoptionPost(postId);
-        return ResponseEntity.ok(ApiResponse.success(null, String.format("분양글 ID:%d가 성공적으로 삭제되었습니다.", postId), HttpStatus.NO_CONTENT.value()));
+        return ResponseEntity.ok(ApiResponse.success(
+                null,
+                AdoptionPostErrorType.POST_DELETED.getMessage(),
+                AdoptionPostErrorType.POST_DELETED.getHttpStatus().value()
+        ));
     }
 
     // ID로 특정 분양글 조회
@@ -57,7 +70,11 @@ public class AdoptionPostController {
     public ResponseEntity<ApiResponse<AdoptionPostDetailDTO>> getAdoptionPostById(
             @PathVariable Long postId) {
         AdoptionPostDetailDTO dto = service.getAdoptionPostById(postId);
-        return ResponseEntity.ok(ApiResponse.success(dto, String.format("분양글 ID:%d가 성공적으로 조회되었습니다.", postId), HttpStatus.OK.value())); // 200 OK와 함께 해당 객체 반환
+        return ResponseEntity.ok(ApiResponse.success(
+                dto,
+                AdoptionPostErrorType.POST_FOUND.getMessage(),
+                AdoptionPostErrorType.POST_FOUND.getHttpStatus().value()
+        ));
     }
 
     // 분양글 조회 (전체 조회 및 정렬 조회) + 검색 기록 저장 기능
@@ -69,7 +86,11 @@ public class AdoptionPostController {
             Pageable pageable) {
         Member member = memberService.findByIdOrThrow(memberId);
         Slice<AdoptionPostSortDTO> posts = service.getAdoptionPosts(sortBy, pageable, member, keyword);
-        return ResponseEntity.ok(ApiResponse.success(posts, "분양글이 성공적으로 정렬되었습니다.", HttpStatus.OK.value()));
+        return ResponseEntity.ok(ApiResponse.success(
+                posts,
+                AdoptionPostErrorType.POST_SORTED.getMessage(),
+                AdoptionPostErrorType.POST_SORTED.getHttpStatus().value()
+        ));
     }
 
 }
