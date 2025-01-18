@@ -5,6 +5,8 @@ import PetBridge.member.model.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 @Entity
 @Getter
 @Builder(toBuilder = true)//엔티티 생성 시 명시적으로 필드를 설정할 수 있도록 도와주는 디자인 패턴
@@ -77,10 +79,20 @@ public class AdoptionPost {
     private Boolean adoptionFinalizationStatus = false;
 
     //클릭 수(조회수)
-    private Long clickCount = 0L;
+    private AtomicLong clickCount = new AtomicLong(0);
 
     //찜 수
-    private Long wishCount = 0L;
+    private AtomicLong wishCount = new AtomicLong(0);
 
+    public void increaseWishCount() {
+        wishCount.incrementAndGet();
+    }
 
+    public void decreaseWishCount() {
+        wishCount.decrementAndGet();
+    }
+
+    public void increaseClickCount() {
+        clickCount.incrementAndGet();
+    }
 }
