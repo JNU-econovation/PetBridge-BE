@@ -149,4 +149,16 @@ public class AdoptionPostService {
         ));
 
     }
+
+    @Transactional
+    public void increaseWishCountById(Long postId) {
+        AdoptionPost adoptionPost = findByIdOrThrow(postId);
+        adoptionPost.increaseWishCount();
+    }
+
+    @Transactional
+    public void decreaseWishCountById(Long postId) {
+        AdoptionPost adoptionPost = findByIdOrThrow(postId);
+        adoptionPost.decreaseWishCount();
+    }
 }
