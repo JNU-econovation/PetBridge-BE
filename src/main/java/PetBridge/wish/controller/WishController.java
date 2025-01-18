@@ -23,7 +23,7 @@ public class WishController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/{postId}")
+    @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deleteWish(
             @ValidMember Member member,
             @PathVariable("postId") Long postId

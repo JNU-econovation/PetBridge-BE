@@ -1,9 +1,11 @@
 package PetBridge.adoptionPost.model.entity;
 
-import PetBridge.breed.model.entity.Breed;
+import PetBridge.animal.model.entity.Breed;
 import PetBridge.member.model.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 @Entity
 @Getter
@@ -77,10 +79,28 @@ public class AdoptionPost {
     private Boolean adoptionFinalizationStatus = false;
 
     //클릭 수(조회수)
-    private Long clickCount = 0L;
+    private AtomicLong clickCount;
 
     //찜 수
-    private Long wishCount = 0L;
+    private AtomicLong wishCount;
 
+    public void increaseWishCount() {
+        wishCount.incrementAndGet();
+    }
 
+    public void decreaseWishCount() {
+        wishCount.decrementAndGet();
+    }
+
+    public void increaseClickCount() {
+        clickCount.incrementAndGet();
+    }
+
+    public Long getClickCount() {
+        return clickCount.get();
+    }
+
+    public Long getWishCount() {
+        return wishCount.get();
+    }
 }
