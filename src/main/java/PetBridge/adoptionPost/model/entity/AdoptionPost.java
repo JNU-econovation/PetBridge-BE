@@ -79,10 +79,10 @@ public class AdoptionPost {
     private Boolean adoptionFinalizationStatus = false;
 
     //클릭 수(조회수)
-    private AtomicLong clickCount = new AtomicLong(0);
+    private AtomicLong clickCount;
 
     //찜 수
-    private AtomicLong wishCount = new AtomicLong(0);
+    private AtomicLong wishCount;
 
     public void increaseWishCount() {
         wishCount.incrementAndGet();

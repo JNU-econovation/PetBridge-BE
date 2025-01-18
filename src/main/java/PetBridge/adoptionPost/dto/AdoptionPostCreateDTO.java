@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public record AdoptionPostCreateDTO (
     @NotBlank(message = "제목은 필수 입력 사항입니다.")
     String title,
@@ -74,6 +76,8 @@ public record AdoptionPostCreateDTO (
                 .adoptionFinalizationStatus(this.adoptionFinalizationStatus)
                 .member(Member.builder().id(this.memberId).build())
                 .breed(Breed.builder().id(this.breedId).build())
+                .wishCount(new AtomicLong(0))
+                .clickCount(new AtomicLong(0))
                 .build();
     }
 }
