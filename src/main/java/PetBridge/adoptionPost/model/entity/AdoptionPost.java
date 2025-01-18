@@ -1,6 +1,6 @@
 package PetBridge.adoptionPost.model.entity;
 
-import PetBridge.breed.model.entity.Breed;
+import PetBridge.animal.model.entity.Breed;
 import PetBridge.member.model.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;

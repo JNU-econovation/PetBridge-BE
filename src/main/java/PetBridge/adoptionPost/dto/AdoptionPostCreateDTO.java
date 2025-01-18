@@ -1,7 +1,7 @@
 package PetBridge.adoptionPost.dto;
 
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
-import PetBridge.breed.model.entity.Breed;
+import PetBridge.animal.model.entity.Breed;
 import PetBridge.member.model.entity.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
