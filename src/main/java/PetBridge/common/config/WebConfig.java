@@ -29,7 +29,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/api/v1/auth/login",
                         "/api/v1/auth/signup",
                         "/api/v1/email/emailCode",
-                        "/api/v1/member/nickname/*");  // 예외 URL
+                        "/api/v1/member/nickname/*",
+                        "/api/v1/animal/*");  // 예외 URL
     }
 
     @Override
