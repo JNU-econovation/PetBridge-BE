@@ -36,6 +36,7 @@ public class WishService {
         if (existByMemberAndPost)
             throw new DuplicateRequestException();
 
+        adoptionPostService.increaseWishCountById(adoptionPost.getId());
         wishRepository.save(Wish.builder()
                 .member(member)
                 .adoptionPost(adoptionPost)
@@ -46,6 +47,7 @@ public class WishService {
     @Transactional
     public void deleteWish(Member member, Long postId) {
         AdoptionPost adoptionPost = adoptionPostService.findByIdOrThrow(postId);
+        adoptionPostService.decreaseWishCountById(adoptionPost.getId());
         Wish wish = findByMemberAndPostOrThrow(member, adoptionPost);
         wishRepository.delete(wish);
     }
