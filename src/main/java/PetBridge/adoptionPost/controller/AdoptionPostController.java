@@ -6,6 +6,7 @@ import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
 import PetBridge.adoptionPost.exception.AdoptionPostErrorType;
 import PetBridge.adoptionPost.service.AdoptionPostService;
+import PetBridge.adoptionPost.service.S3ImageService;
 import PetBridge.common.response.ApiResponse;
 import PetBridge.member.model.entity.Member;
 import PetBridge.member.service.MemberService;
@@ -15,16 +16,21 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/adoption-post")
 public class AdoptionPostController {
     private final AdoptionPostService service;
     private final MemberService memberService;
+    private final S3ImageService s3ImageService;
 
-    public AdoptionPostController(AdoptionPostService service, MemberService memberService) {
+    public AdoptionPostController(AdoptionPostService service, MemberService memberService, S3ImageService s3ImageService) {
         this.service = service;
         this.memberService = memberService;
+        this.s3ImageService = s3ImageService;
     }
 
     // 분양글 생성
@@ -91,6 +97,25 @@ public class AdoptionPostController {
                 AdoptionPostErrorType.POST_SORTED.getMessage(),
                 AdoptionPostErrorType.POST_SORTED.getHttpStatus().value()
         ));
+    }
+
+    @PostMapping("/images")
+    public ResponseEntity<String> uploadImage(@RequestPart(value = "image") MultipartFile image) {
+        try {
+            //S3에 이미지를 업로드하고 업로드된 이미지 URL을 반환받음
+            String imageUrl = s3ImageService.upload(image);
+            //성공시 URL을 클라이언트에 반환함
+            return ResponseEntity.ok(imageUrl);
+        } catch (IOException e) {
+            //업로드 실패시 500 상태와 에러 메시지를 반환함
+            return ResponseEntity.status(500).body("이미지 업로드 실패" + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/images")
+    public ResponseEntity<String> deleteImage(@RequestParam String imageUrl) {
+        s3ImageService.delete(imageUrl);
+        return ResponseEntity.ok("이미지 삭제 성공");
     }
 
 }
