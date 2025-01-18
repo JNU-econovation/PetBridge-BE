@@ -95,4 +95,12 @@ public class AdoptionPost {
     public void increaseClickCount() {
         clickCount.incrementAndGet();
     }
+
+    public Long getClickCount() {
+        return clickCount.get();
+    }
+
+    public Long getWishCount() {
+        return wishCount.get();
+    }
 }
