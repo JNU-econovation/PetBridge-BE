@@ -8,7 +8,6 @@ import PetBridge.adoptionPost.exception.AdoptionPostNotFoundException;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.repository.AdoptionPostRepository;
 import PetBridge.member.model.entity.Member;
-import PetBridge.member.repository.MemberRepository;
 import PetBridge.search.service.SearchService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -32,7 +31,7 @@ public class AdoptionPostService {
     @Transactional(readOnly = true)
     public AdoptionPost findByIdOrThrow(Long postId) {
         return adoptionPostRepository.findById(postId)
-                .orElseThrow(() -> new AdoptionPostNotFoundException("해당 ID의 분양글을 찾을 수 없습니다: " + postId));
+                .orElseThrow(() -> new AdoptionPostNotFoundException());
     }
 
 

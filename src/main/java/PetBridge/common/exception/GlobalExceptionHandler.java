@@ -1,7 +1,7 @@
 package PetBridge.common.exception;
 
 import PetBridge.adoptionPost.exception.AdoptionPostNotFoundException;
-import PetBridge.common.dto.ErrorResponseDTO;
+import PetBridge.common.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AdoptionPostNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleAdoptionPostNotFoundException(
+    public ResponseEntity<ApiResponse<Void>> handleAdoptionPostNotFoundException(
             AdoptionPostNotFoundException ex) {
-        ErrorResponseDTO errorResponse = new ErrorResponseDTO(ex.getMessage(), HttpStatus.NOT_FOUND.value());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), ex.getMessage()));
     }
 }
