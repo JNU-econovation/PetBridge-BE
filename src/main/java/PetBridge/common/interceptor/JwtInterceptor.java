@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.thymeleaf.util.StringUtils;
 
@@ -21,18 +22,18 @@ public class JwtInterceptor implements HandlerInterceptor {
         this.memberService = memberService;
     }
 
-    @Override
-    public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response,
-                             Object handler) {
+            @Override
+        public boolean preHandle(HttpServletRequest request,
+                HttpServletResponse response,
+                Object handler) {
 
-        if (StringUtils.equals(request.getMethod(), "OPTIONS")){
-            return true;
-        }
+            if (CorsUtils.isPreFlightRequest(request)){
+                return true;
+            }
 
-        String token = jwtTokenProviderService.extractToken(request.getHeader(HttpHeaders.AUTHORIZATION));
+            String token = jwtTokenProviderService.extractToken(request.getHeader(HttpHeaders.AUTHORIZATION));
 
-        if(request.getRequestURI().equals(REISSUE_URI)) //reissue 토큰인 경우 토큰 존재하는지 확인
+            if(request.getRequestURI().equals(REISSUE_URI)) //reissue 토큰인 경우 토큰 존재하는지 확인
             return jwtTokenProviderService.validationRefreshToken(token);
 
         Long memberId = jwtTokenProviderService.parseClaims(token).get("id", Long.class);
