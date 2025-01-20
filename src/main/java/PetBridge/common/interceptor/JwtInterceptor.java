@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.thymeleaf.util.StringUtils;
 
 @Component
 public class JwtInterceptor implements HandlerInterceptor {
@@ -24,6 +25,11 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
                              Object handler) {
+
+        if (StringUtils.equals(request.getMethod(), "OPTIONS")){
+            return true;
+        }
+
         String token = jwtTokenProviderService.extractToken(request.getHeader(HttpHeaders.AUTHORIZATION));
 
         if(request.getRequestURI().equals(REISSUE_URI)) //reissue 토큰인 경우 토큰 존재하는지 확인
