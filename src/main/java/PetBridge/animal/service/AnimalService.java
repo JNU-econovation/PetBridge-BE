@@ -5,8 +5,7 @@ import PetBridge.animal.dto.BreedTagsDTO;
 import PetBridge.animal.model.entity.Breed;
 import PetBridge.animal.model.entity.Tag;
 import PetBridge.animal.repository.BreedRepository;
-import PetBridge.animal.repository.TagAdoptionPostMappingRepository;
-import PetBridge.animal.repository.TagBreedMappingRepository;
+import PetBridge.adoptionPost.repository.TagAdoptionPostMappingRepository;
 import PetBridge.animal.repository.TagRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,15 +16,14 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class AnimalService {
-    private final String GENDER = "성별";
-    private final String INOCULATION = "접종 내역";
-    private final String TYPE = "동물 종류";
-    private final String SIZE = "동물 크기";
+    private static final String GENDER = "성별";
+    private static final String INOCULATION = "접종 내역";
+    private static final String TYPE = "동물 종류";
+    private static final String SIZE = "동물 크기";
 
-    private BreedRepository breedRepository;
-    private TagAdoptionPostMappingRepository tagAdoptionPostMappingRepository;
-    private TagBreedMappingRepository tagBreedMappingRepository;
-    private TagRepository tagRepository;
+    private final BreedRepository breedRepository;
+    private final TagAdoptionPostMappingRepository tagAdoptionPostMappingRepository;
+    private final TagRepository tagRepository;
 
     @Transactional(readOnly = true)
     public AnimalTagsDTO getAnimalTags() {
