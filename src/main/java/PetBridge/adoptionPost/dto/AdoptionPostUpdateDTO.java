@@ -14,7 +14,7 @@ public record AdoptionPostUpdateDTO (
     String subTitle,
 
     @PositiveOrZero(message = "몸무게는 0 이상이어야 합니다.")
-    Long weight,
+    Double weight,
 
     @PositiveOrZero(message = "나이는 0 이상이어야 합니다.")
     Long age,
