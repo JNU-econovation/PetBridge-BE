@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface TagAdoptionPostMappingRepository extends JpaRepository<TagAdoptionPostMapping, Long> {
     List<TagAdoptionPostMapping> findMappingListByAdoptionPost(AdoptionPost adoptionPost);
+
+    List<TagAdoptionPostMapping> findByAdoptionPost(AdoptionPost adoptionPost);
 }

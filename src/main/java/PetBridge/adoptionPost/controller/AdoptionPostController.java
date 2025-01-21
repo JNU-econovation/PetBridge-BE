@@ -62,7 +62,8 @@ public class AdoptionPostController {
     // ID로 특정 분양글 조회
     @GetMapping("/{postId}")
     public ResponseEntity<AdoptionPostDetailDTO> getAdoptionPostById(
-            @PathVariable Long postId) {
+            @PathVariable Long postId,
+            @ValidMember Member member) {
         AdoptionPostDetailDTO dto = adoptionPostService.getAdoptionPostById(postId);
         return ResponseEntity.ok(dto); // 200 OK와 함께 해당 객체 반환
     }

@@ -4,6 +4,7 @@ import PetBridge.adoptionPost.dto.AdoptionPostCreateDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostDetailDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
 import PetBridge.adoptionPost.exception.AdoptionPostNotFoundException;
+import PetBridge.adoptionPost.mapper.AdoptionPostMapper;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.repository.AdoptionPostRepository;
 import PetBridge.animal.model.entity.Breed;
@@ -25,6 +26,7 @@ public class AdoptionPostService {
     private final BreedService breedService;
     private final TagService tagService;
     private final TagAdoptionPostMappingService tagAdoptionPostMappingService;
+    private final AdoptionPostMapper adoptionPostMapper;
 
     @Transactional(readOnly = true)
     public AdoptionPost findByIdOrThrow(Long postId) {
@@ -95,28 +97,11 @@ public class AdoptionPostService {
     // 특정 ID로 분양글 조회 (분양글 상세페이지)
     @Transactional(readOnly = true)
     public AdoptionPostDetailDTO getAdoptionPostById(Long postId) {
-        AdoptionPost post = findByIdOrThrow(postId);
+        AdoptionPost adoptionPost = findByIdOrThrow(postId);
+        Tag genderTag = tagAdoptionPostMappingService.findGenderTagOfAdoptionPost(adoptionPost);
+        List<Tag> inoculationTagList = tagAdoptionPostMappingService.findInoculationTagListOfAdoptionPost(adoptionPost);
 
-        return new AdoptionPostDetailDTO(post.getId(),
-                post.getTitle(),
-                post.getSubTitle(),
-                post.getWeight(),
-                post.getAge(),
-                post.getIsNeutered(),
-                post.getIsAdoptionContractRequired(),
-                post.getMeetingPlace(),
-                post.getLikes(),
-                post.getHates(),
-                post.getCurrentDiseases(),
-                post.getPastDiseases(),
-                post.getPetOwnerRequirement(),
-                post.getDetailContent(),
-                post.getAdoptionFinalizationStatus(),
-                post.getClickCount(),
-                post.getWishCount(),
-                post.getBreed().getName(),
-                post.getMember().getNickname()
-        );
+        return adoptionPostMapper.toAdoptionPostDetailDTO(adoptionPost,genderTag.getName(), inoculationTagList);
     }
 
     @Transactional
