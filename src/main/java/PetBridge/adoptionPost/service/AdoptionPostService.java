@@ -100,6 +100,7 @@ public class AdoptionPostService {
         AdoptionPost adoptionPost = findByIdOrThrow(postId);
         Tag genderTag = tagAdoptionPostMappingService.findGenderTagOfAdoptionPost(adoptionPost);
         List<Tag> inoculationTagList = tagAdoptionPostMappingService.findInoculationTagListOfAdoptionPost(adoptionPost);
+        adoptionPostRepository.incrementClickCount(adoptionPost);
 
         return adoptionPostMapper.toAdoptionPostDetailDTO(adoptionPost,genderTag.getName(), inoculationTagList);
     }
