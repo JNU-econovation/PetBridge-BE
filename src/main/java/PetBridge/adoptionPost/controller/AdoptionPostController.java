@@ -5,10 +5,13 @@ import PetBridge.adoptionPost.dto.AdoptionPostDetailDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
+import PetBridge.adoptionPost.service.AdoptionPostSearchService;
 import PetBridge.adoptionPost.service.AdoptionPostService;
+import PetBridge.auth.jwt.annotation.ValidMember;
 import PetBridge.member.model.entity.Member;
 import PetBridge.member.service.MemberService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
@@ -18,21 +21,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/v1/adoption-post")
 public class AdoptionPostController {
-    private final AdoptionPostService service;
-    private final MemberService memberService;
+    private static final String SORT_DEFAULT = "recent";
 
-    public AdoptionPostController(AdoptionPostService service, MemberService memberService) {
-        this.service = service;
-        this.memberService = memberService;
-    }
+    private final AdoptionPostService adoptionPostService;
+    private final MemberService memberService;
+    private final AdoptionPostSearchService adoptionPostSearchService;
 
     // 분양글 생성
     @PostMapping
     public ResponseEntity<Void> createAdoptionPost(
-            @RequestBody @Valid AdoptionPostCreateDTO adoptionPostCreateDTO) {
-        service.createAdoptionPost(adoptionPostCreateDTO);
+            @RequestBody @Valid AdoptionPostCreateDTO adoptionPostCreateDTO,
+            @ValidMember Member member) {
+        adoptionPostService.createAdoptionPost(adoptionPostCreateDTO, member);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -40,16 +43,19 @@ public class AdoptionPostController {
     @PutMapping("/{postId}")
     public ResponseEntity<Void> updateAdoptionPost(
             @PathVariable("postId") Long postId,
-            @RequestBody @Valid AdoptionPostUpdateDTO adoptionPostUpdateDTO) {
-        AdoptionPost post = service.updateAdoptionPost(postId, adoptionPostUpdateDTO);
+            @RequestBody @Valid AdoptionPostUpdateDTO adoptionPostUpdateDTO,
+            @ValidMember Member member
+    ) {
+        AdoptionPost post = adoptionPostService.updateAdoptionPost(postId, adoptionPostUpdateDTO, member);
         return ResponseEntity.ok().build();
     }
 
     //분양글 삭제
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deleteAdoptionPost(
-            @PathVariable Long postId) {
-        service.deleteAdoptionPost(postId);
+            @PathVariable Long postId,
+            @ValidMember Member member) {
+        adoptionPostService.deleteAdoptionPost(postId, member);
         return ResponseEntity.noContent().build(); // 204 No Content 반환
     }
 
@@ -57,19 +63,24 @@ public class AdoptionPostController {
     @GetMapping("/{postId}")
     public ResponseEntity<AdoptionPostDetailDTO> getAdoptionPostById(
             @PathVariable Long postId) {
-        AdoptionPostDetailDTO dto = service.getAdoptionPostById(postId);
+        AdoptionPostDetailDTO dto = adoptionPostService.getAdoptionPostById(postId);
         return ResponseEntity.ok(dto); // 200 OK와 함께 해당 객체 반환
     }
 
+
     // 분양글 조회 (전체 조회 및 정렬 조회) + 검색 기록 저장 기능
     @GetMapping
-    public Slice<AdoptionPostSortDTO> getAdoptionPosts(
-            @RequestParam(required = false, defaultValue = "all") String sortBy,
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = true) Long memberId,
-            Pageable pageable) {
-        Member member = memberService.findByIdOrThrow(memberId);
-        return service.getAdoptionPosts(sortBy, pageable, member, keyword);
+    public ResponseEntity<List<AdoptionPostSortDTO>> searchAdoptionPosts(
+            @RequestParam(name = "sortBy", required = false, defaultValue = SORT_DEFAULT) String sortBy,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "tagIdList", required = false) List<Long> tagIdList,
+            @RequestParam(name = "breedIdList", required = false) List<Long> breedIdList,
+            @ValidMember Member member) {
+
+        List<AdoptionPostSortDTO> searchedAdoptionPosts = adoptionPostSearchService.getAdoptionPosts(sortBy, member, keyword, tagIdList, breedIdList);
+        return ResponseEntity.status(HttpStatus.OK).body(searchedAdoptionPosts);
     }
+
+
 
 }
