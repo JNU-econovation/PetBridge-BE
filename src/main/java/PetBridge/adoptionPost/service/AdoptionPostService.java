@@ -55,29 +55,9 @@ public class AdoptionPostService {
 
     // 분양글 수정
     @Transactional
-    public AdoptionPost updateAdoptionPost(Long postId, AdoptionPostUpdateDTO adoptionPostUpdateDTO, Member member) {
+    public void updateAdoptionPost(Long postId, AdoptionPostUpdateDTO adoptionPostUpdateDTO, Member member) {
         AdoptionPost adoptionPost = findByIdOrThrow(postId);
-
-        return updateFields(adoptionPost, adoptionPostUpdateDTO);
-    }
-
-    private AdoptionPost updateFields(AdoptionPost adoptionPost, AdoptionPostUpdateDTO dto) {
-        return adoptionPost.toBuilder()
-                .title(dto.title()) // dto.getTitle() -> dto.title()
-                .subTitle(dto.subTitle())
-                .weight(dto.weight())
-                .age(dto.age())
-                .isNeutered(dto.isNeutered())
-                .isAdoptionContractRequired(dto.isAdoptionContractRequired())
-                .meetingPlace(dto.meetingPlace())
-                .likes(dto.likes())
-                .hates(dto.hates())
-                .currentDiseases(dto.currentDiseases())
-                .pastDiseases(dto.pastDiseases())
-                .petOwnerRequirement(dto.petOwnerRequirement())
-                .detailContent(dto.detailContent())
-                .adoptionFinalizationStatus(dto.adoptionFinalizationStatus())
-                .build();
+        adoptionPost.updateAdoptionPost(adoptionPostUpdateDTO);
     }
 
     //분양글 삭제
@@ -95,7 +75,7 @@ public class AdoptionPostService {
     }
 
     // 특정 ID로 분양글 조회 (분양글 상세페이지)
-    @Transactional(readOnly = true)
+    @Transactional
     public AdoptionPostDetailDTO getAdoptionPostById(Long postId) {
         AdoptionPost adoptionPost = findByIdOrThrow(postId);
         Tag genderTag = tagAdoptionPostMappingService.findGenderTagOfAdoptionPost(adoptionPost);

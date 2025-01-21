@@ -46,7 +46,7 @@ public class AdoptionPostController {
             @RequestBody @Valid AdoptionPostUpdateDTO adoptionPostUpdateDTO,
             @ValidMember Member member
     ) {
-        AdoptionPost post = adoptionPostService.updateAdoptionPost(postId, adoptionPostUpdateDTO, member);
+        adoptionPostService.updateAdoptionPost(postId, adoptionPostUpdateDTO, member);
         return ResponseEntity.ok().build();
     }
 
