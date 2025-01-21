@@ -34,7 +34,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             String token = jwtTokenProviderService.extractToken(request.getHeader(HttpHeaders.AUTHORIZATION));
 
             if(request.getRequestURI().equals(REISSUE_URI)) //reissue 토큰인 경우 토큰 존재하는지 확인
-            return jwtTokenProviderService.validationRefreshToken(token);
+                return jwtTokenProviderService.validationRefreshToken(token);
 
         Long memberId = jwtTokenProviderService.parseClaims(token).get("id", Long.class);
         memberService.findByIdOrThrow(memberId);//존재하는 멤버인지 확인
