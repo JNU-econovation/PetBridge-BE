@@ -23,14 +23,14 @@ public class AnimalService {
 
     private final BreedRepository breedRepository;
     private final TagAdoptionPostMappingRepository tagAdoptionPostMappingRepository;
-    private final TagRepository tagRepository;
+    private final TagService tagService;
 
     @Transactional(readOnly = true)
     public AnimalTagListDTO getAnimalTags() {
-        List<Tag> genderTagList = tagRepository.findByAttribute(GENDER);
-        List<Tag> inoculationTagList = tagRepository.findByAttribute(INOCULATION);
-        List<Tag> animalTypeTagList = tagRepository.findByAttribute(TYPE);
-        List<Tag> animalSizeTagList = tagRepository.findByAttribute(SIZE);
+        List<Tag> genderTagList = tagService.findTagListByAttributeOrThrow(GENDER);
+        List<Tag> inoculationTagList = tagService.findTagListByAttributeOrThrow(INOCULATION);
+        List<Tag> animalTypeTagList = tagService.findTagListByAttributeOrThrow(TYPE);
+        List<Tag> animalSizeTagList = tagService.findTagListByAttributeOrThrow(SIZE);
 
         return new AnimalTagListDTO(
                 genderTagList,
@@ -44,5 +44,13 @@ public class AnimalService {
         List<Breed> animalBreedList = breedRepository.findAll();
 
         return new BreedTagListDTO(animalBreedList);
+    }
+
+    @Transactional(readOnly = true)
+    public BreedTagListDTO getFilteredBreedTags(Long animalTypeId) {
+        Tag animalTypeTag = tagService.findByIdOrThrow(animalTypeId);
+        List<Breed> filteredAnimalBreedList =breedRepository.findByAnimalType(animalTypeTag);
+
+        return new BreedTagListDTO(filteredAnimalBreedList);
     }
 }

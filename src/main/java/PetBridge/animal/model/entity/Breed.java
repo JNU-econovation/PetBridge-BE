@@ -20,5 +20,9 @@ public class Breed {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Tag animalType;
+
     private String imagePath;
 }

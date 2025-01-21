@@ -15,6 +15,11 @@ public class TagService {
     private final TagRepository tagRepository;
 
     @Transactional(readOnly = true)
+    public List<Tag> findTagListByAttributeOrThrow(String attribute) {
+        return tagRepository.findByAttribute(attribute);
+    }
+
+    @Transactional(readOnly = true)
     public List<Tag> findByIdListOrThrow (List<Long> tagIdList) {
         return tagIdList
                 .stream()
