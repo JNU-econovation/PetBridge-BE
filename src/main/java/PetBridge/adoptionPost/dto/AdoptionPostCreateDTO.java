@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.List;
 
 public record AdoptionPostCreateDTO (
     @NotBlank(message = "제목은 필수 입력 사항입니다.")
@@ -18,7 +18,7 @@ public record AdoptionPostCreateDTO (
     String subTitle,
 
     @PositiveOrZero(message = "몸무게는 0 이상이어야 합니다.")
-    Long weight,
+    Double weight,
 
     @PositiveOrZero(message = "나이는 0 이상이어야 합니다.")
     Long age,
@@ -51,14 +51,14 @@ public record AdoptionPostCreateDTO (
     //클라이언트에서 값을 전달하지 않으면, 엔티티에서 정의한 기본값(false)이 자동으로 적용됨
     Boolean adoptionFinalizationStatus,
 
-    @NotNull(message = "분양 작성자는 필수 입력 사항입니다.")
-    Long memberId,
-
     @NotNull(message = "품종 정보는 필수 입력 사항입니다.")
-    Long breedId
+    Long breedId,
+
+    @NotNull(message =  "태그 정보는 필수 입력 사항입니다.")
+    List<Long> tagIdList
 ){
     // DTO를 엔티티로 변환하는 메서드
-    public AdoptionPost toEntity() {
+    public AdoptionPost toEntity(Member member, Breed breed) {
         return AdoptionPost.builder()
                 .title(this.title)
                 .subTitle(this.subTitle)
@@ -74,10 +74,10 @@ public record AdoptionPostCreateDTO (
                 .petOwnerRequirement(this.petOwnerRequirement)
                 .detailContent(this.detailContent)
                 .adoptionFinalizationStatus(this.adoptionFinalizationStatus)
-                .member(Member.builder().id(this.memberId).build())
-                .breed(Breed.builder().id(this.breedId).build())
-                .wishCount(new AtomicLong(0))
-                .clickCount(new AtomicLong(0))
+                .member(member)
+                .breed(breed)
+                .wishCount(0L)
+                .clickCount(0L)
                 .build();
     }
 }

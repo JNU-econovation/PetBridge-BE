@@ -11,11 +11,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class WishService {
-    private WishRepository wishRepository;
-    private AdoptionPostService adoptionPostService;
+    private final WishRepository wishRepository;
+    private final AdoptionPostService adoptionPostService;
 
     @Transactional(readOnly = true)
     public Wish findByMemberAndPostOrThrow(Member member, AdoptionPost adoptionPost) {
@@ -26,6 +28,11 @@ public class WishService {
     @Transactional(readOnly = true)
     public boolean existsByMemberAndAdoptionPost(Member member, AdoptionPost adoptionPost) {
         return wishRepository.existsByMemberAndAdoptionPost(member, adoptionPost);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Wish> findListByMember(Member member) {
+        return wishRepository.findByMember(member);
     }
 
     @Transactional

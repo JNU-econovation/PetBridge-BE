@@ -1,30 +1,26 @@
 package PetBridge.adoptionPost.model.entity;
 
+import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
 import PetBridge.animal.model.entity.Breed;
 import PetBridge.member.model.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 @Entity
 @Getter
-@Builder(toBuilder = true)//엔티티 생성 시 명시적으로 필드를 설정할 수 있도록 도와주는 디자인 패턴
-@AllArgsConstructor//모든 필드를 매개변수로 받는 생성자를 생성
-@NoArgsConstructor(access = AccessLevel.PROTECTED)//매개변수가 없는 기본 생성자 생성
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AdoptionPost {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //ManyToOne 매핑 순서 변경함 : ManyToOne관계에서 참조되는 엔티티가 먼저 정의되어야 외래키 제약 조건이 올바르게 설정됨
-    //분양 신청자
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adoption_seeker_id")
     private Member adoptionSeeker;
 
-    //품종 정보
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "breed_id", nullable = false)
     private Breed breed;
@@ -41,7 +37,7 @@ public class AdoptionPost {
     private String subTitle;
 
     //체중
-    private Long weight;
+    private Double weight;
 
     //나이
     private Long age;
@@ -79,28 +75,25 @@ public class AdoptionPost {
     private Boolean adoptionFinalizationStatus = false;
 
     //클릭 수(조회수)
-    private AtomicLong clickCount;
+    private Long clickCount;
 
     //찜 수
-    private AtomicLong wishCount;
+    private Long wishCount;
 
-    public void increaseWishCount() {
-        wishCount.incrementAndGet();
-    }
-
-    public void decreaseWishCount() {
-        wishCount.decrementAndGet();
-    }
-
-    public void increaseClickCount() {
-        clickCount.incrementAndGet();
-    }
-
-    public Long getClickCount() {
-        return clickCount.get();
-    }
-
-    public Long getWishCount() {
-        return wishCount.get();
+    public void updateAdoptionPost(AdoptionPostUpdateDTO dto) {
+        this.title = dto.title();
+        this.subTitle = dto.subTitle();
+        this.weight = dto.weight();
+        this.age =dto.age();
+        this.isNeutered = dto.isNeutered();
+        this.isAdoptionContractRequired = dto.isAdoptionContractRequired();
+        this.meetingPlace = dto.meetingPlace();
+        this.likes = dto.likes();
+        this.hates = dto.hates();
+        this.currentDiseases = dto.currentDiseases();
+        this. pastDiseases = dto.pastDiseases();
+        this.petOwnerRequirement = dto.petOwnerRequirement();
+        this.detailContent = dto.detailContent();
+        this.adoptionFinalizationStatus = dto.adoptionFinalizationStatus();
     }
 }

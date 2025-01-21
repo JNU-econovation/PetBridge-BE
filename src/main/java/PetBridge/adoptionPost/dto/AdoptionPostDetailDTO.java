@@ -1,23 +1,27 @@
 package PetBridge.adoptionPost.dto;
 
+import PetBridge.animal.model.entity.Tag;
+
+import java.util.List;
+
 public record AdoptionPostDetailDTO(
         Long id,
+        String breed,
+        String gender,
         String title,
         String subTitle,
-        Long weight,
+        Double weight,
         Long age,
         Boolean isNeutered,
         Boolean isAdoptionContractRequired,
+        List<Tag> inoculationList,
         String meetingPlace,
-        String likes,
         String hates,
+        String likes,
         String currentDiseases,
         String pastDiseases,
         String petOwnerRequirement,
         String detailContent,
-        Boolean adoptionFinalizationStatus,
-        Long clickCount,
-        Long wishCount,
-        String breedName, // 품종 정보
-        String memberNickname // 작성자 닉네임
-) {}
+        Boolean adoptionFinalizationStatus
+) {
+}

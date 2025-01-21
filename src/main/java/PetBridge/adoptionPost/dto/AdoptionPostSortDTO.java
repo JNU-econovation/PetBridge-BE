@@ -5,6 +5,7 @@ public record AdoptionPostSortDTO(
         String title,
         String subTitle,
         Long clickCount,
-        Long wishCount
+        Long wishCount,
+        Boolean isWishPost
 ) {
 }

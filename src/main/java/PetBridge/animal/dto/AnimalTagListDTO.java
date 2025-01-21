@@ -4,7 +4,7 @@ import PetBridge.animal.model.entity.Tag;
 
 import java.util.List;
 
-public record AnimalTagsDTO (
+public record AnimalTagListDTO(
         List<Tag> genderTagList,
         List<Tag> inoculationTagList,
         List<Tag> animalTypeTagList,

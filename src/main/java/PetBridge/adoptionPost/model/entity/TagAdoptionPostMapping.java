@@ -1,5 +1,6 @@
-package PetBridge.animal.model.entity;
+package PetBridge.adoptionPost.model.entity;
 
+import PetBridge.animal.model.entity.Tag;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,20 +11,16 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TagBreedMapping {
+public class TagAdoptionPostMapping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn
-    private Tag animalTypeTag;
+    private Tag tag;
 
     @ManyToOne
     @JoinColumn
-    private Tag animalSizeTag;
-
-    @ManyToOne
-    @JoinColumn
-    private Breed breed;
+    private AdoptionPost adoptionPost;
 }

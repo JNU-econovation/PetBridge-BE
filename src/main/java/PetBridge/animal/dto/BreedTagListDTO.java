@@ -4,7 +4,7 @@ import PetBridge.animal.model.entity.Breed;
 
 import java.util.List;
 
-public record BreedTagsDTO(
+public record BreedTagListDTO(
         List<Breed> animalBreedList
 ) {
 }
