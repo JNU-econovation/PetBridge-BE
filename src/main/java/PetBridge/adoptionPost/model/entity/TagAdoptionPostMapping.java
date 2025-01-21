@@ -1,6 +1,6 @@
-package PetBridge.animal.model.entity;
+package PetBridge.adoptionPost.model.entity;
 
-import PetBridge.adoptionPost.model.entity.AdoptionPost;
+import PetBridge.animal.model.entity.Tag;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
