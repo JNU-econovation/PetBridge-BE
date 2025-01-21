@@ -54,18 +54,13 @@ public class AdoptionPostService {
     // 분양글 수정
     @Transactional
     public AdoptionPost updateAdoptionPost(Long postId, AdoptionPostUpdateDTO adoptionPostUpdateDTO, Member member) {
-        // 1. 기존 분양글 조회
-        AdoptionPost existingPost = findByIdOrThrow(postId);
+        AdoptionPost adoptionPost = findByIdOrThrow(postId);
 
-        // 2. 필드 업데이트
-        return updateFields(existingPost, adoptionPostUpdateDTO);
+        return updateFields(adoptionPost, adoptionPostUpdateDTO);
     }
 
-    // 필드 업데이트 메서드
-    // updateFields는 엔티티의 필드 값만 변경하는 비즈니스 로직에 해당하며 데이터베이스와의 직접적인 상호작용이 없습니다.
-    // 반면 findByIdOrThrow는 데이터베이스 조회 작업을 수행하므로 트랜잭션 관리가 필요합니다.
-    private AdoptionPost updateFields(AdoptionPost existingPost, AdoptionPostUpdateDTO dto) {
-        return existingPost.toBuilder()
+    private AdoptionPost updateFields(AdoptionPost adoptionPost, AdoptionPostUpdateDTO dto) {
+        return adoptionPost.toBuilder()
                 .title(dto.title()) // dto.getTitle() -> dto.title()
                 .subTitle(dto.subTitle())
                 .weight(dto.weight())
@@ -88,6 +83,7 @@ public class AdoptionPostService {
     public void deleteAdoptionPost(Long postId, Member member) {
         AdoptionPost adoptionPost = findByIdAndMemberOrThrow(postId,member);
         adoptionPostRepository.delete(adoptionPost);
+        tagAdoptionPostMappingService.deleteAllMapping(adoptionPost);
     }
 
     // 전체 분양글 조회
