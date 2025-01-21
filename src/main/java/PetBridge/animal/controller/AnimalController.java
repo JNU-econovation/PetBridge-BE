@@ -1,7 +1,7 @@
 package PetBridge.animal.controller;
 
-import PetBridge.animal.dto.AnimalTagsDTO;
-import PetBridge.animal.dto.BreedTagsDTO;
+import PetBridge.animal.dto.AnimalTagListDTO;
+import PetBridge.animal.dto.BreedTagListDTO;
 import PetBridge.animal.dto.res.GetAnimalTagsRes;
 import PetBridge.animal.dto.res.GetBreedTagsRes;
 import PetBridge.animal.service.AnimalService;
@@ -20,13 +20,13 @@ public class AnimalController {
 
     @GetMapping("/tags")
     public ResponseEntity<GetAnimalTagsRes> getAnimalTags () {
-        AnimalTagsDTO animalTagsDTO = animalService.getAnimalTags();
-        return ResponseEntity.status(HttpStatus.OK).body(GetAnimalTagsRes.from(animalTagsDTO));
+        AnimalTagListDTO animalTagListDTO = animalService.getAnimalTags();
+        return ResponseEntity.status(HttpStatus.OK).body(GetAnimalTagsRes.from(animalTagListDTO));
     }
 
     @GetMapping("/breeds")
     public ResponseEntity<GetBreedTagsRes> getBreedTagsRes () {
-        BreedTagsDTO breedTagsDTO = animalService.getBreedTags();
-        return ResponseEntity.status(HttpStatus.OK).body(GetBreedTagsRes.from(breedTagsDTO));
+        BreedTagListDTO breedTagListDTO = animalService.getBreedTags();
+        return ResponseEntity.status(HttpStatus.OK).body(GetBreedTagsRes.from(breedTagListDTO));
     }
 }

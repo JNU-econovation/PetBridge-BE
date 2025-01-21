@@ -1,6 +1,6 @@
 package PetBridge.animal.dto.res;
 
-import PetBridge.animal.dto.AnimalTagsDTO;
+import PetBridge.animal.dto.AnimalTagListDTO;
 import PetBridge.animal.model.entity.Tag;
 
 import java.util.List;
@@ -11,11 +11,11 @@ public record GetAnimalTagsRes (
         List<Tag> animalTypeTagList,
         List<Tag> animalSizeTagList
 ) {
-    public static GetAnimalTagsRes from(AnimalTagsDTO animalTagsDTO) {
+    public static GetAnimalTagsRes from(AnimalTagListDTO animalTagListDTO) {
         return new GetAnimalTagsRes(
-                animalTagsDTO.genderTagList(),
-                animalTagsDTO.inoculationTagList(),
-                animalTagsDTO.animalTypeTagList(),
-                animalTagsDTO.animalSizeTagList());
+                animalTagListDTO.genderTagList(),
+                animalTagListDTO.inoculationTagList(),
+                animalTagListDTO.animalTypeTagList(),
+                animalTagListDTO.animalSizeTagList());
     }
 }

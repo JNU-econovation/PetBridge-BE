@@ -1,7 +1,7 @@
 package PetBridge.animal.service;
 
-import PetBridge.animal.dto.AnimalTagsDTO;
-import PetBridge.animal.dto.BreedTagsDTO;
+import PetBridge.animal.dto.AnimalTagListDTO;
+import PetBridge.animal.dto.BreedTagListDTO;
 import PetBridge.animal.model.entity.Breed;
 import PetBridge.animal.model.entity.Tag;
 import PetBridge.animal.repository.BreedRepository;
@@ -26,13 +26,13 @@ public class AnimalService {
     private final TagRepository tagRepository;
 
     @Transactional(readOnly = true)
-    public AnimalTagsDTO getAnimalTags() {
+    public AnimalTagListDTO getAnimalTags() {
         List<Tag> genderTagList = tagRepository.findByAttribute(GENDER);
         List<Tag> inoculationTagList = tagRepository.findByAttribute(INOCULATION);
         List<Tag> animalTypeTagList = tagRepository.findByAttribute(TYPE);
         List<Tag> animalSizeTagList = tagRepository.findByAttribute(SIZE);
 
-        return new AnimalTagsDTO(
+        return new AnimalTagListDTO(
                 genderTagList,
                 inoculationTagList,
                 animalTypeTagList,
@@ -40,9 +40,9 @@ public class AnimalService {
     }
 
     @Transactional(readOnly = true)
-    public BreedTagsDTO getBreedTags() {
+    public BreedTagListDTO getBreedTags() {
         List<Breed> animalBreedList = breedRepository.findAll();
 
-        return new BreedTagsDTO(animalBreedList);
+        return new BreedTagListDTO(animalBreedList);
     }
 }
