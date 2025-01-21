@@ -41,7 +41,7 @@ public class AdoptionPost {
     private String subTitle;
 
     //체중
-    private Long weight;
+    private Double weight;
 
     //나이
     private Long age;
