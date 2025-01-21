@@ -79,28 +79,8 @@ public class AdoptionPost {
     private Boolean adoptionFinalizationStatus = false;
 
     //클릭 수(조회수)
-    private AtomicLong clickCount;
+    private Long clickCount;
 
     //찜 수
-    private AtomicLong wishCount;
-
-    public void increaseWishCount() {
-        wishCount.incrementAndGet();
-    }
-
-    public void decreaseWishCount() {
-        wishCount.decrementAndGet();
-    }
-
-    public void increaseClickCount() {
-        clickCount.incrementAndGet();
-    }
-
-    public Long getClickCount() {
-        return clickCount.get();
-    }
-
-    public Long getWishCount() {
-        return wishCount.get();
-    }
+    private Long wishCount;
 }
