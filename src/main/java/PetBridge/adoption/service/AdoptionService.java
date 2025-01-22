@@ -9,6 +9,7 @@ import PetBridge.adoption.model.entity.Adoption;
 import PetBridge.adoption.repository.AdoptionRepository;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.service.AdoptionPostService;
+import PetBridge.alert.service.AlertService;
 import PetBridge.member.model.entity.Member;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdoptionService {
     private final AdoptionRepository adoptionRepository;
     private final AdoptionPostService adoptionPostService;
+    private final AlertService alertService;
 
     @Transactional(readOnly = true)
     public Adoption findByIdOrThrow (Long adoptionId) {
@@ -38,7 +40,14 @@ public class AdoptionService {
 
         adoptionPost.requestAdoption(member);
 
-        adoptionRepository.save(adoptionReq.toEntity(adoptionPost));
+        Adoption adoption = adoptionRepository.save(adoptionReq.toEntity(adoptionPost));
+
+        sendAdoptionRequestAlert(adoption, adoptionPost);
+    }
+
+    @Transactional
+    private void sendAdoptionRequestAlert(Adoption adoption, AdoptionPost adoptionPost) {
+        alertService.addAdoptionRequestAlert(adoptionPost,adoption);
     }
 
     @Transactional
@@ -48,5 +57,38 @@ public class AdoptionService {
 
         adoptionPost.finalizeAdoption();
         adoption.updatePetOwnerPhoneNumber(adoptionFinalizationReq.petOwnerPhoneNumber());
+
+        sendAdoptionFinalizationAlert(adoption, adoptionPost);
+    }
+
+    @Transactional
+    private void sendAdoptionFinalizationAlert(Adoption adoption, AdoptionPost adoptionPost) {
+        Member petOwner = adoptionPost.getMember();
+        Member adoptionSeeker = adoptionPost.getAdoptionSeeker();
+
+        alertService.addAdoptionFinalizationAlert(adoptionPost,adoption,petOwner);
+        alertService.addAdoptionFinalizationAlert(adoptionPost, adoption, adoptionSeeker);
+    }
+
+    @Transactional
+    public void cancelAdoption(Long adoptionId, Member member) {
+        Adoption adoption = findByIdOrThrow(adoptionId);
+        AdoptionPost adoptionPost = adoption.getAdoptionPost();
+
+        adoptionPost.cancelRequestAdoption();
+        adoptionPost.cancelAdoptionFinalization();
+
+        sendAdoptionCancelAlert(adoptionPost, adoption);
+
+        adoption.softDelete();
+    }
+
+    @Transactional
+    private void sendAdoptionCancelAlert(AdoptionPost adoptionPost, Adoption adoption) {
+        Member petOwner = adoptionPost.getMember();
+        Member adoptionSeeker = adoptionPost.getAdoptionSeeker();
+
+        alertService.addAdoptionCancelAlert(adoptionPost, adoption, petOwner);
+        alertService.addAdoptionCancelAlert(adoptionPost, adoption, adoptionSeeker);
     }
 }

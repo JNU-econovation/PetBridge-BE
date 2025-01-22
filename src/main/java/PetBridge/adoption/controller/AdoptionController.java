@@ -35,4 +35,13 @@ public class AdoptionController {
         adoptionService.finalizeAdoption(adoptionId, member, adoptionFinalizationReq);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @DeleteMapping("/cancel/{adoptionId}")
+    public ResponseEntity<Void> cancelAdoption(
+        @PathVariable("adoptionId") Long adoptionId,
+        @ValidMember Member member
+    ) {
+        adoptionService.cancelAdoption(adoptionId, member);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

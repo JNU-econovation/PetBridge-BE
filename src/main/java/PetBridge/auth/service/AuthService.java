@@ -1,5 +1,6 @@
 package PetBridge.auth.service;
 
+import PetBridge.alert.service.AlertService;
 import PetBridge.auth.dto.AuthTokenDTO;
 import PetBridge.auth.dto.AccessTokenDTO;
 import PetBridge.auth.dto.request.LoginReq;
@@ -18,11 +19,18 @@ public class AuthService {
     private final MemberService memberService;
     private final AuthTokenService authTokenService;
     private final SearchConditionService searchConditionService;
+    private final AlertService alertService;
 
     @Transactional
     public void signUp(SignUpReq signUpRequest) {
         Member member = memberService.createMember(signUpRequest);
         searchConditionService.addSearchCondition(member);
+        sendWelcomeAlert(member);
+    }
+
+    @Transactional
+    private void sendWelcomeAlert(Member member) {
+        alertService.addNormalAlertOfWelcome(member);
     }
 
     @Transactional

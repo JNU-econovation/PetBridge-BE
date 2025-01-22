@@ -31,4 +31,8 @@ public abstract class BaseEntity {
     private LocalDateTime lastModifiedDate;
 
     private Boolean isDelete;
+
+    public void softDelete() {
+        this.isDelete = true;
+    }
 }

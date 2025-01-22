@@ -1,6 +1,6 @@
 package PetBridge.adoptionPost.dto;
 
-import PetBridge.animal.model.entity.Tag;
+import PetBridge.animal.dto.TagDTO;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public record AdoptionPostDetailDTO(
         Long age,
         Boolean isNeutered,
         Boolean isAdoptionContractRequired,
-        List<Tag> inoculationList,
+        List<TagDTO> inoculationList,
         String meetingPlace,
         String hates,
         String likes,
