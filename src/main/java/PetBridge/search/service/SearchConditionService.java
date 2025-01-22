@@ -46,7 +46,7 @@ public class SearchConditionService {
     @Transactional
     public void updateSortBy(SearchCondition searchCondition, String sortBy) {
         if (sortBy != null && !sortBy.isBlank())
-            searchCondition.updateKeyword(sortBy);
+            searchCondition.updateSortBy(sortBy);
     }
     
     @Transactional
