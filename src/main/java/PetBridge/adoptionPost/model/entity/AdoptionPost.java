@@ -96,4 +96,28 @@ public class AdoptionPost {
         this.detailContent = dto.detailContent();
         this.adoptionFinalizationStatus = dto.adoptionFinalizationStatus();
     }
+
+    public boolean isAdoptionInProgress() {
+        return this.adoptionSeeker != null;
+    }
+
+    public boolean isAdoptionFinalization() {
+        return this.adoptionFinalizationStatus;
+    }
+
+    public void requestAdoption(Member adoptionSeeker) {
+        this.adoptionSeeker = adoptionSeeker;
+    }
+
+    public void cancelRequestAdoption() {
+        this.adoptionSeeker = null;
+    }
+
+    public void cancelAdoptionFinalization() {
+        this.adoptionFinalizationStatus = false;
+    }
+
+    public void finalizeAdoption() {
+        this.adoptionFinalizationStatus = true;
+    }
 }
