@@ -80,7 +80,7 @@ public class AdoptionPostSearchService {
 
     @Transactional
     private void saveSearchHistory(Member member, String keyword) {
-        if (keyword == null)
+        if (keyword == null || keyword.isBlank())
             return;
         searchService.addSearchHistory(member, keyword);
     }
