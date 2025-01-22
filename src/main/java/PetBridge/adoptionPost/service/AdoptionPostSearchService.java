@@ -52,14 +52,14 @@ public class AdoptionPostSearchService {
 
     @Transactional(readOnly = true)
     private List<Breed> getBreedList(List<Long> breedIdList) {
-        if (breedIdList == null)
+        if (breedIdList == null || breedIdList.isEmpty())
             return null;
         return breedService.findByIdListOrThrow(breedIdList);
     }
 
     @Transactional(readOnly = true)
     private List<Tag> getTagList(List<Long> tagIdList) {
-        if (tagIdList == null )
+        if (tagIdList == null || tagIdList.isEmpty())
             return null;
         return tagService.findByIdListOrThrow(tagIdList);
     }
