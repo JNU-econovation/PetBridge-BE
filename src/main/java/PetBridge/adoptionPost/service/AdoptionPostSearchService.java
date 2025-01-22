@@ -9,6 +9,8 @@ import PetBridge.animal.model.entity.Tag;
 import PetBridge.animal.service.BreedService;
 import PetBridge.animal.service.TagService;
 import PetBridge.member.model.entity.Member;
+import PetBridge.search.model.entity.SearchCondition;
+import PetBridge.search.service.SearchConditionService;
 import PetBridge.search.service.SearchService;
 import PetBridge.wish.model.entity.Wish;
 import PetBridge.wish.service.WishService;
@@ -27,16 +29,19 @@ public class AdoptionPostSearchService {
     private final BreedService breedService;
     private final WishService wishService;
     private final AdoptionPostMapper adoptionPostMapper;
+    private final SearchConditionService searchConditionService;
 
     @Transactional
     public List<AdoptionPostSortDTO> getAdoptionPosts(String sortBy, Member member, String keyword, List<Long> tagIdList, List<Long> breedIdList) {
         saveSearchHistory(member, keyword);
 
-        List<Tag> tagList = getTagList(tagIdList);
-        List<Breed> breedList = getBreedList(breedIdList);
+        SearchCondition searchCondition = searchConditionService.findByMemberOrThrow(member);
+        searchConditionService.updateSearchCondition(searchCondition, sortBy, keyword, tagIdList, breedIdList);
 
+        List<Tag> tagList = getTagList(searchCondition.getTagIdList());
+        List<Breed> breedList = getBreedList(searchCondition.getBreedIdList());
 
-        List<AdoptionPost> searchedAdoptionPostList = adoptionPostRepository.findAllFilteredAdoptionPost(sortBy, keyword, tagList, breedList);
+        List<AdoptionPost> searchedAdoptionPostList = adoptionPostRepository.findAllFilteredAdoptionPost(searchCondition, tagList, breedList);
         List<AdoptionPost> wishPostList = filterWishPost(searchedAdoptionPostList, member);
 
         return searchedAdoptionPostList
@@ -51,11 +56,12 @@ public class AdoptionPostSearchService {
     }
 
     @Transactional(readOnly = true)
-    private List<Breed> getBreedList(List<Long> breedIdList) {
-        if (breedIdList == null || breedIdList.isEmpty())
+    private List<Breed> getBreedList(List<Long> BreedIdList) {
+        if (BreedIdList == null || BreedIdList.isEmpty())
             return null;
-        return breedService.findByIdListOrThrow(breedIdList);
+        return breedService.findByIdListOrThrow(BreedIdList);
     }
+
 
     @Transactional(readOnly = true)
     private List<Tag> getTagList(List<Long> tagIdList) {

@@ -46,9 +46,9 @@ public class MemberService {
     }
 
     @Transactional
-    public void createMember(SignUpReq signUpRequest) {
+    public Member createMember(SignUpReq signUpRequest) {
         validateDuplicateEmail(signUpRequest.email());
-        memberRepository.save(signUpRequest.toEntity());
+        return memberRepository.save(signUpRequest.toEntity());
     }
 
     @Transactional
