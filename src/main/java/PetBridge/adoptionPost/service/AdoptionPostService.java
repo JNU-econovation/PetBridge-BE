@@ -1,8 +1,6 @@
 package PetBridge.adoptionPost.service;
 
-import PetBridge.adoptionPost.dto.AdoptionPostCreateDTO;
-import PetBridge.adoptionPost.dto.AdoptionPostDetailDTO;
-import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
+import PetBridge.adoptionPost.dto.*;
 import PetBridge.adoptionPost.exception.AdoptionPostNotFoundException;
 import PetBridge.adoptionPost.mapper.AdoptionPostMapper;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
@@ -38,6 +36,14 @@ public class AdoptionPostService {
     public AdoptionPost findByIdAndMemberOrThrow(Long postId, Member member) {
         return adoptionPostRepository.findByIdAndMember(postId, member)
                 .orElseThrow(AdoptionPostNotFoundException::new);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AdoptionPostDTO> findListByMember(Member member) {
+        return adoptionPostRepository.findByMember(member)
+                .stream()
+                .map(adoptionPostMapper::toAdoptionPostDTO)
+                .toList();
     }
 
 

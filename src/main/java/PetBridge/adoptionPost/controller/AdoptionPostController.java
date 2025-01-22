@@ -1,9 +1,6 @@
 package PetBridge.adoptionPost.controller;
 
-import PetBridge.adoptionPost.dto.AdoptionPostCreateDTO;
-import PetBridge.adoptionPost.dto.AdoptionPostDetailDTO;
-import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
-import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
+import PetBridge.adoptionPost.dto.*;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.service.AdoptionPostSearchService;
 import PetBridge.adoptionPost.service.AdoptionPostService;
@@ -82,6 +79,11 @@ public class AdoptionPostController {
         return ResponseEntity.status(HttpStatus.OK).body(searchedAdoptionPosts);
     }
 
-
-
+    @GetMapping("/my-posts")
+    public ResponseEntity<GetMyPostListRes> getMyPostList(
+            @ValidMember Member member
+    ) {
+        List<AdoptionPostDTO> adoptionPostList= adoptionPostService.findListByMember(member);
+        return ResponseEntity.status(HttpStatus.OK).body(new GetMyPostListRes(adoptionPostList));
+    }
 }
