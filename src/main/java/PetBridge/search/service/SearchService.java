@@ -33,6 +33,7 @@ public class SearchService {
     private void deleteSingleSearchHistory(Member member, Long searchHistoryId) {
         SearchHistory historyToDelete = findByMemberAndIdOrThrow(member, searchHistoryId);
         deleteHistoryById(historyToDelete.getId());
+        member.decreaseHistoryCountByRemove();
     }
 
     @Transactional
