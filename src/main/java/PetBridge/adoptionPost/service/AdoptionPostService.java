@@ -90,7 +90,4 @@ public class AdoptionPostService {
         AdoptionPost adoptionPost = findByIdOrThrow(postId);
         adoptionPostRepository.decrementWishCount(adoptionPost);
     }
-
-    public void increaseWishCount(AdoptionPost adoptionPost) {
-    }
 }
