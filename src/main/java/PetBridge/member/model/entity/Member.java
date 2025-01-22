@@ -30,7 +30,7 @@ public class Member extends BaseEntity {
     }
 
     public boolean isSearchHistoryCountMax() {
-        return searchHistoryCount == 10;
+        return searchHistoryCount >= 10;
     }
 
     public void increaseHistoryCountBySearching() {
