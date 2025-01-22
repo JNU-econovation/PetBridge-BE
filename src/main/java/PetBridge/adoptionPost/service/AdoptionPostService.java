@@ -68,12 +68,6 @@ public class AdoptionPostService {
         tagAdoptionPostMappingService.deleteAllMapping(adoptionPost);
     }
 
-    // 전체 분양글 조회
-    @Transactional(readOnly = true)
-    public List<AdoptionPost> getAllAdoptionPosts() {
-        return adoptionPostRepository.findAll(); // 모든 분양글 반환
-    }
-
     // 특정 ID로 분양글 조회 (분양글 상세페이지)
     @Transactional
     public AdoptionPostDetailDTO getAdoptionPostById(Long postId) {
