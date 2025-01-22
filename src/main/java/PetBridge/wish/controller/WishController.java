@@ -1,5 +1,6 @@
 package PetBridge.wish.controller;
 
+import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
 import PetBridge.auth.jwt.annotation.ValidMember;
 import PetBridge.member.model.entity.Member;
 import PetBridge.wish.service.WishService;
@@ -7,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/wish")
@@ -30,5 +33,13 @@ public class WishController {
     ) {
         wishService.deleteWish(member, postId);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<AdoptionPostSortDTO>> getWishPostList(
+            @ValidMember Member member
+    ) {
+        List<AdoptionPostSortDTO> wishPostList = wishService.getWishPostList(member);
+        return ResponseEntity.status(HttpStatus.OK).body(wishPostList);
     }
 }

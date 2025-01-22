@@ -1,5 +1,7 @@
 package PetBridge.wish.service;
 
+import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
+import PetBridge.adoptionPost.mapper.AdoptionPostMapper;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.service.AdoptionPostService;
 import PetBridge.member.model.entity.Member;
@@ -18,6 +20,7 @@ import java.util.List;
 public class WishService {
     private final WishRepository wishRepository;
     private final AdoptionPostService adoptionPostService;
+    private final AdoptionPostMapper adoptionPostMapper;
 
     @Transactional(readOnly = true)
     public Wish findByMemberAndPostOrThrow(Member member, AdoptionPost adoptionPost) {
@@ -57,5 +60,13 @@ public class WishService {
         adoptionPostService.decreaseWishCountById(adoptionPost.getId());
         Wish wish = findByMemberAndPostOrThrow(member, adoptionPost);
         wishRepository.delete(wish);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AdoptionPostSortDTO> getWishPostList(Member member) {
+        return findListByMember(member)
+                .stream()
+                .map(wish -> adoptionPostMapper.toAdoptionPostSortDTO(wish.getAdoptionPost(), true))
+                .toList();
     }
 }
