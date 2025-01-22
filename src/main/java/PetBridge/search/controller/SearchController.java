@@ -47,7 +47,7 @@ public class SearchController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PutMapping
+    @PutMapping("/search-condition")
     public ResponseEntity<Void> resetSearchCondition(
             @ValidMember Member member
     ) {
