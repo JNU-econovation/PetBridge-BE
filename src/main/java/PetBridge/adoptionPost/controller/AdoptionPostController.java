@@ -69,7 +69,7 @@ public class AdoptionPostController {
     // 분양글 조회 (전체 조회 및 정렬 조회) + 검색 기록 저장 기능
     @GetMapping
     public ResponseEntity<List<AdoptionPostSortDTO>> searchAdoptionPosts(
-            @RequestParam(name = "sortBy", required = false, defaultValue = SORT_DEFAULT) String sortBy,
+            @RequestParam(name = "sortBy", required = false) String sortBy,
             @RequestParam(name = "keyword", required = false) String keyword,
             @RequestParam(name = "tagIdList", required = false) List<Long> tagIdList,
             @RequestParam(name = "breedIdList", required = false) List<Long> breedIdList,

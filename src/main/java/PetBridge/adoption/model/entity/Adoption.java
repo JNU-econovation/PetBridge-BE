@@ -23,17 +23,13 @@ public class Adoption extends BaseEntity {
     @JoinColumn
     private AdoptionPost adoptionPost;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private Member petOwner;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private Member adoptionSeeker;
-
     private String adoptionSeekerRequirement;
 
     private String petOwnerPhoneNumber;
 
     private String adoptionSeekerPhoneNumber;
+
+    public void updatePetOwnerPhoneNumber(String petOwnerPhoneNumber) {
+        this.petOwnerPhoneNumber = petOwnerPhoneNumber;
+    }
 }
