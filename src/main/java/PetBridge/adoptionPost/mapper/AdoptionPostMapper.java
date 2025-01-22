@@ -4,6 +4,7 @@ import PetBridge.adoptionPost.dto.AdoptionPostDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostDetailDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
+import PetBridge.animal.dto.TagDTO;
 import PetBridge.animal.model.entity.Tag;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,11 @@ public class AdoptionPostMapper {
     }
 
     public AdoptionPostDetailDTO toAdoptionPostDetailDTO(AdoptionPost adoptionPost, String gender, List<Tag> inoculationList) {
+        List<TagDTO> inoculationDTOList = inoculationList
+                .stream()
+                .map(TagDTO::from)
+                .toList();
+
         return new AdoptionPostDetailDTO(
                 adoptionPost.getId(),
                 adoptionPost.getBreed().getName(),
@@ -36,7 +42,7 @@ public class AdoptionPostMapper {
                 adoptionPost.getAge(),
                 adoptionPost.getIsNeutered(),
                 adoptionPost.getIsAdoptionContractRequired(),
-                inoculationList,
+                inoculationDTOList,
                 adoptionPost.getMeetingPlace(),
                 adoptionPost.getHates(),
                 adoptionPost.getLikes(),
