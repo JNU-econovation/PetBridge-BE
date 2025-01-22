@@ -1,8 +1,6 @@
 package PetBridge.adoptionPost.service;
 
-import PetBridge.adoptionPost.dto.AdoptionPostCreateDTO;
-import PetBridge.adoptionPost.dto.AdoptionPostDetailDTO;
-import PetBridge.adoptionPost.dto.AdoptionPostUpdateDTO;
+import PetBridge.adoptionPost.dto.*;
 import PetBridge.adoptionPost.exception.AdoptionPostNotFoundException;
 import PetBridge.adoptionPost.mapper.AdoptionPostMapper;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
@@ -40,6 +38,14 @@ public class AdoptionPostService {
                 .orElseThrow(AdoptionPostNotFoundException::new);
     }
 
+    @Transactional(readOnly = true)
+    public List<AdoptionPostDTO> findListByMember(Member member) {
+        return adoptionPostRepository.findByMember(member)
+                .stream()
+                .map(adoptionPostMapper::toAdoptionPostDTO)
+                .toList();
+    }
+
 
     //분양글 생성
     @Transactional
@@ -68,12 +74,6 @@ public class AdoptionPostService {
         tagAdoptionPostMappingService.deleteAllMapping(adoptionPost);
     }
 
-    // 전체 분양글 조회
-    @Transactional(readOnly = true)
-    public List<AdoptionPost> getAllAdoptionPosts() {
-        return adoptionPostRepository.findAll(); // 모든 분양글 반환
-    }
-
     // 특정 ID로 분양글 조회 (분양글 상세페이지)
     @Transactional
     public AdoptionPostDetailDTO getAdoptionPostById(Long postId) {
@@ -95,8 +95,5 @@ public class AdoptionPostService {
     public void decreaseWishCountById(Long postId) {
         AdoptionPost adoptionPost = findByIdOrThrow(postId);
         adoptionPostRepository.decrementWishCount(adoptionPost);
-    }
-
-    public void increaseWishCount(AdoptionPost adoptionPost) {
     }
 }

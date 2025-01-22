@@ -3,6 +3,7 @@ package PetBridge.wish.controller;
 import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
 import PetBridge.auth.jwt.annotation.ValidMember;
 import PetBridge.member.model.entity.Member;
+import PetBridge.wish.dto.res.GetWishPostListRes;
 import PetBridge.wish.service.WishService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,10 +37,10 @@ public class WishController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<AdoptionPostSortDTO>> getWishPostList(
+    public ResponseEntity<GetWishPostListRes> getWishPostList(
             @ValidMember Member member
     ) {
         List<AdoptionPostSortDTO> wishPostList = wishService.getWishPostList(member);
-        return ResponseEntity.status(HttpStatus.OK).body(wishPostList);
+        return ResponseEntity.status(HttpStatus.OK).body(new GetWishPostListRes(wishPostList));
     }
 }

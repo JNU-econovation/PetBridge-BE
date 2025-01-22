@@ -58,13 +58,6 @@ public class AdoptionPostSearchService {
     }
 
     @Transactional(readOnly = true)
-    private Long getTagListSize(List<Tag> tagList) {
-        if (tagList == null)
-            return 0L;
-        return (long)tagList.size();
-    }
-
-    @Transactional(readOnly = true)
     private List<Tag> getTagList(List<Long> tagIdList) {
         if (tagIdList == null )
             return null;
@@ -83,14 +76,6 @@ public class AdoptionPostSearchService {
                  .stream()
                  .filter(wishPostList::contains)
                  .toList();
-    }
-
-    //사용자의 검색어에 대한 전처리
-    private String processKeyword(String searchKeyword) {
-        if (searchKeyword == null || searchKeyword.isEmpty())
-            return null;
-
-        return searchKeyword;
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package PetBridge.adoptionPost.mapper;
 
+import PetBridge.adoptionPost.dto.AdoptionPostDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostDetailDTO;
 import PetBridge.adoptionPost.dto.AdoptionPostSortDTO;
 import PetBridge.adoptionPost.model.entity.AdoptionPost;
@@ -44,6 +45,16 @@ public class AdoptionPostMapper {
                 adoptionPost.getPetOwnerRequirement(),
                 adoptionPost.getDetailContent(),
                 adoptionPost.getAdoptionFinalizationStatus()
+        );
+    }
+
+    public AdoptionPostDTO toAdoptionPostDTO(AdoptionPost adoptionPost) {
+        return new AdoptionPostDTO(
+                adoptionPost.getId(),
+                adoptionPost.getTitle(),
+                adoptionPost.getSubTitle(),
+                adoptionPost.getClickCount(),
+                adoptionPost.getWishCount()
         );
     }
 }
