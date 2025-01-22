@@ -4,6 +4,7 @@ import PetBridge.auth.jwt.annotation.ValidMember;
 import PetBridge.member.model.entity.Member;
 import PetBridge.search.dto.SearchHistoryDTO;
 import PetBridge.search.dto.res.RecentSearchHistoryRes;
+import PetBridge.search.service.SearchConditionService;
 import PetBridge.search.service.SearchService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequestMapping("api/v1/search")
 public class SearchController {
     private final SearchService searchService;
+    private final SearchConditionService searchConditionService;
 
     @GetMapping("/recently")
     public ResponseEntity<RecentSearchHistoryRes> getRecentSearchHistory (
@@ -45,5 +47,11 @@ public class SearchController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-
+    @PutMapping
+    public ResponseEntity<Void> resetSearchCondition(
+            @ValidMember Member member
+    ) {
+        searchConditionService.resetSearchCondition(member);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
