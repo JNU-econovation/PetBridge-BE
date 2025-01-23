@@ -9,10 +9,12 @@ import PetBridge.animal.model.entity.Breed;
 import PetBridge.animal.model.entity.Tag;
 import PetBridge.animal.service.BreedService;
 import PetBridge.animal.service.TagService;
+import PetBridge.common.S3ImageService;
 import PetBridge.member.model.entity.Member;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,6 +27,8 @@ public class AdoptionPostService {
     private final TagService tagService;
     private final TagAdoptionPostMappingService tagAdoptionPostMappingService;
     private final AdoptionPostMapper adoptionPostMapper;
+    private final S3ImageService s3ImageService;
+    private final AdoptionPostImageService adoptionPostImageService;
 
     @Transactional(readOnly = true)
     public AdoptionPost findByIdOrThrow(Long postId) {
@@ -49,7 +53,7 @@ public class AdoptionPostService {
 
     //분양글 생성
     @Transactional
-    public void createAdoptionPost(AdoptionPostCreateDTO dto, Member member) {
+    public Long createAdoptionPost(AdoptionPostCreateDTO dto, Member member) {
         Breed breed = breedService.findByIdOrThrow(dto.breedId());
         List<Tag> tagList = tagService.findByIdListOrThrow(dto.tagIdList());
 
@@ -57,6 +61,8 @@ public class AdoptionPostService {
         adoptionPostRepository.save(post);
 
         tagList.forEach(tag -> tagAdoptionPostMappingService.saveMapping(post, tag));
+        adoptionPostImageService.addAdoptionPostImage(post);
+        return post.getId();
     }
 
     // 분양글 수정
@@ -95,5 +101,17 @@ public class AdoptionPostService {
     public void decreaseWishCountById(Long postId) {
         AdoptionPost adoptionPost = findByIdOrThrow(postId);
         adoptionPostRepository.decrementWishCount(adoptionPost);
+    }
+
+    @Transactional
+    public void saveImage(MultipartFile image, Long adoptionPostId) {
+        AdoptionPost adoptionPost = findByIdOrThrow(adoptionPostId);
+        adoptionPostImageService.saveImage(adoptionPost,image);
+    }
+
+    @Transactional
+    public void saveMainImage(MultipartFile mainImage, Long adoptionPostId) {
+        AdoptionPost adoptionPost = findByIdOrThrow(adoptionPostId);
+        adoptionPostImageService.saveMainImage(adoptionPost, mainImage);
     }
 }
