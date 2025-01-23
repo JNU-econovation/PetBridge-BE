@@ -1,7 +1,6 @@
 package PetBridge.adoptionPost.controller;
 
 import PetBridge.adoptionPost.dto.*;
-import PetBridge.adoptionPost.model.entity.AdoptionPost;
 import PetBridge.adoptionPost.service.AdoptionPostSearchService;
 import PetBridge.adoptionPost.service.AdoptionPostService;
 import PetBridge.auth.jwt.annotation.ValidMember;
@@ -9,11 +8,10 @@ import PetBridge.member.model.entity.Member;
 import PetBridge.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,11 +27,11 @@ public class AdoptionPostController {
 
     // 분양글 생성
     @PostMapping
-    public ResponseEntity<Void> createAdoptionPost(
+    public ResponseEntity<CreateAdoptionPostRes> createAdoptionPost(
             @RequestBody @Valid AdoptionPostCreateDTO adoptionPostCreateDTO,
             @ValidMember Member member) {
-        adoptionPostService.createAdoptionPost(adoptionPostCreateDTO, member);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        Long adoptionPostId = adoptionPostService.createAdoptionPost(adoptionPostCreateDTO, member);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new CreateAdoptionPostRes(adoptionPostId));
     }
 
     //분양글 수정
@@ -85,5 +83,23 @@ public class AdoptionPostController {
     ) {
         List<AdoptionPostDTO> adoptionPostList= adoptionPostService.findListByMember(member);
         return ResponseEntity.status(HttpStatus.OK).body(new GetMyPostListRes(adoptionPostList));
+    }
+
+    @PostMapping("/image/{adoptionPostId}")
+    public ResponseEntity<Void> uploadImage(
+            @RequestPart("image")MultipartFile image,
+            @PathVariable("adoptionPostId") Long adoptionPostId
+    ) {
+        adoptionPostService.saveImage(image, adoptionPostId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/mainImage/{adoptionPostId}")
+    public ResponseEntity<Void> uploadMainImage(
+            @RequestPart("image") MultipartFile image,
+            @PathVariable("adoptionPostId") Long adoptionPostId
+    ) {
+        adoptionPostService.saveMainImage(image, adoptionPostId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

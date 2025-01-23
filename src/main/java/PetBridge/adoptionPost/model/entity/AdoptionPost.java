@@ -6,6 +6,8 @@ import PetBridge.member.model.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Builder(toBuilder = true)
@@ -79,6 +81,10 @@ public class AdoptionPost {
 
     //찜 수
     private Long wishCount;
+
+    private String mainImage;
+
+    private List<String> imageList;
 
     public void updateAdoptionPost(AdoptionPostUpdateDTO dto) {
         this.title = dto.title();
