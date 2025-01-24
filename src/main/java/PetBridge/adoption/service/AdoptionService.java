@@ -2,6 +2,7 @@ package PetBridge.adoption.service;
 
 import PetBridge.adoption.dto.req.AdoptionFinalizationReq;
 import PetBridge.adoption.dto.req.AdoptionReq;
+import PetBridge.adoption.dto.res.GetAdoptionRes;
 import PetBridge.adoption.exception.AdoptionNotFoundException;
 import PetBridge.adoption.exception.AlreadyFinalizationAdoptionException;
 import PetBridge.adoption.exception.AlreadyInProgressAdoptionException;
@@ -90,5 +91,12 @@ public class AdoptionService {
 
         alertService.addAdoptionCancelAlert(adoptionPost, adoption, petOwner);
         alertService.addAdoptionCancelAlert(adoptionPost, adoption, adoptionSeeker);
+    }
+
+    @Transactional(readOnly = true)
+    public GetAdoptionRes getAdoption(Long adoptionId) {
+        Adoption adoption = findByIdOrThrow(adoptionId);
+
+        return GetAdoptionRes.from(adoption.getAdoptionPost(),adoption);
     }
 }

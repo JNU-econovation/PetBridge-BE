@@ -2,6 +2,7 @@ package PetBridge.adoption.controller;
 
 import PetBridge.adoption.dto.req.AdoptionFinalizationReq;
 import PetBridge.adoption.dto.req.AdoptionReq;
+import PetBridge.adoption.dto.res.GetAdoptionRes;
 import PetBridge.adoption.service.AdoptionService;
 import PetBridge.auth.jwt.annotation.ValidMember;
 import PetBridge.member.model.entity.Member;
@@ -44,4 +45,14 @@ public class AdoptionController {
         adoptionService.cancelAdoption(adoptionId, member);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+
+    @GetMapping("/{adoptionId}")
+    public ResponseEntity<GetAdoptionRes> getAdoption(
+            @PathVariable("adoptionId") Long adoptionId
+    ){
+        GetAdoptionRes adoptionRes = adoptionService.getAdoption(adoptionId);
+        return ResponseEntity.status(HttpStatus.OK).body(adoptionRes);
+    }
+
 }
