@@ -73,7 +73,7 @@ public record AdoptionPostCreateDTO (
                 .pastDiseases(this.pastDiseases)
                 .petOwnerRequirement(this.petOwnerRequirement)
                 .detailContent(this.detailContent)
-                .adoptionFinalizationStatus(this.adoptionFinalizationStatus)
+                .adoptionFinalizationStatus(false)
                 .member(member)
                 .breed(breed)
                 .wishCount(0L)
