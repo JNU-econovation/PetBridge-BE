@@ -41,7 +41,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns("http://localhost:5173", "https://localhost:3000," +
-                        "http://localhost:3000")
+                        "http://localhost:3000", "https://pet-bridge-fe-clwx-9lqwi5qq6-kimjunseoks-projects.vercel.app/")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
